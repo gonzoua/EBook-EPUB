@@ -21,31 +21,36 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
-package EPUB::Package::Spine;
+package EPUB::Package::Metadata::DCItem;
 use Moose;
-use EPUB::Package::Spine::Itemref;
 
-has itemrefs => (
-    is         => 'ro',
-    isa        => 'ArrayRef[Object]',
-    default    => sub { [] },
+has [qw/name value/] => (isa => 'Str', is => 'rw');
+has attributes => (
+    traits  => ['Array'],
+    isa     => 'ArrayRef[Str]',
+    is      => 'ro',
+    default => sub { [] },
+    handles    => {
+          all_options    => 'elements',
+          add_option     => 'push',
+    },
 );
 
 sub encode
 {
     my ($self, $writer) = @_;
-    $writer->startTag("spine");
-    foreach my $itemref (@{$self->itemrefs()}) {
-        $itemref->encode($writer);
-    }
-    $writer->endTag("spine");
+    $writer->dataElement($self->name, $self->value,
+        @{$self->attributes},
+    );
+    my %attr = @{$self->attributes()};
 }
 
-sub add_itemref
+# Override default - set not reference value but 
+# reference content
+sub copy_attributes
 {
-    my ($self, @args) = @_;
-    my $itemref = EPUB::Package::Spine::Itemref->new(@args);
-    push @{$self->itemrefs()}, $itemref;
+    my ($self, $ref) = @_;
+    @{$self->attributes()} = @{$ref};
 }
 
 no Moose;

@@ -21,31 +21,18 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
-package EPUB::Package::Spine;
+package EPUB::Package::Metadata::Item;
 use Moose;
-use EPUB::Package::Spine::Itemref;
 
-has itemrefs => (
-    is         => 'ro',
-    isa        => 'ArrayRef[Object]',
-    default    => sub { [] },
-);
+has [qw/name value/] => (isa => 'Str', is => 'rw');
 
 sub encode
 {
     my ($self, $writer) = @_;
-    $writer->startTag("spine");
-    foreach my $itemref (@{$self->itemrefs()}) {
-        $itemref->encode($writer);
-    }
-    $writer->endTag("spine");
-}
-
-sub add_itemref
-{
-    my ($self, @args) = @_;
-    my $itemref = EPUB::Package::Spine::Itemref->new(@args);
-    push @{$self->itemrefs()}, $itemref;
+    $writer->emptyTag("meta",
+        name    => $self->name(),
+        value   => $self->value(),
+    );
 }
 
 no Moose;

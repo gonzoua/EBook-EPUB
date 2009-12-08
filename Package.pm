@@ -25,7 +25,7 @@
 package EPUB::Package;
 use Moose;
 
-use EPUB::Package::Meta;
+use EPUB::Package::Metadata;
 use EPUB::Package::Manifest;
 use EPUB::Package::Guide;
 use EPUB::Package::Spine;
@@ -33,25 +33,25 @@ use EPUB::Package::Spine;
 has metadata    => (
     isa     => 'Object', 
     is      => 'ro',
-    default => sub { EPUB::Container::Meta->new() }
+    default => sub { EPUB::Package::Metadata->new() }
 );
 
 has manifest    => (
     isa     => 'Object', 
     is      => 'ro',
-    default => sub { EPUB::Container::Manifest->new() }
+    default => sub { EPUB::Package::Manifest->new() }
 );
 
 has spine       => (
     isa     => 'Object', 
     is      => 'ro',
-    default => sub { EPUB::Container::Spine->new() }
+    default => sub { EPUB::Package::Spine->new() }
 );
 
 has guide       => (
     isa     => 'Object', 
     is      => 'ro',
-    default => sub { EPUB::Container::Guide->new() }
+    default => sub { EPUB::Package::Guide->new() }
 );
 
 has uuid        => (
@@ -68,10 +68,11 @@ sub encode
         version             => "2.0",
         'unique-identifier' => $self->uuid(),
     );
-    $self->metdata()->encode($writer);
-    $self->manifest()->encode($writer);
-    $self->spine()->encode($writer);
-    $self->guide()->encode($writer);
+    $self->metadata->encode($writer);
+    $self->manifest->encode($writer);
+    $self->spine->encode($writer);
+    $self->guide->encode($writer);
+    $writer->endTag("package");
 }
 
 no Moose;

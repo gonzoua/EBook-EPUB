@@ -54,7 +54,7 @@ has guide       => (
     default => sub { EPUB::Package::Guide->new() }
 );
 
-has uuid        => (
+has uid         => (
     isa     => 'Str',
     is      => 'rw',
 );
@@ -66,7 +66,7 @@ sub encode
     $writer->startTag("package", 
         xmlns               => "http://www.idpf.org/2007/opf",
         version             => "2.0",
-        'unique-identifier' => $self->uuid(),
+        'unique-identifier' => $self->uid(),
     );
     $self->metadata->encode($writer);
     $self->manifest->encode($writer);

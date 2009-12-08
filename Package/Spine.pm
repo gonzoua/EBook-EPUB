@@ -25,6 +25,7 @@ package EPUB::Package::Spine;
 use Moose;
 use EPUB::Package::Spine::Itemref;
 
+has toc => ( isa => 'Str', is => 'rw' );
 has itemrefs => (
     is         => 'ro',
     isa        => 'ArrayRef[Object]',
@@ -34,7 +35,9 @@ has itemrefs => (
 sub encode
 {
     my ($self, $writer) = @_;
-    $writer->startTag("spine");
+    $writer->startTag("spine",
+        toc => $self->toc,
+    );
     foreach my $itemref (@{$self->itemrefs()}) {
         $itemref->encode($writer);
     }

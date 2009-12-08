@@ -21,36 +21,20 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
-package EPUB::Package::Manifest;
+package EPUB::Package::Manifest::Item;
 use Moose;
-use EPUB::Package::Manifest::Item;
 
-has items => (
-    is         => 'ro',
-    isa        => 'ArrayRef[Object]',
-    default    => sub { [] },
-);
+has [qw/id href media_type/] => ( isa => 'Str', is => 'rw' );
 
 sub encode
 {
     my ($self, $writer) = @_;
-    $writer->startTag("manifest");
-    foreach my $item (@{$self->items()}) {
-        $item->encode($writer);
-    }
-    $writer->endTag("manifest");
+    $writer->emptyTag("item", 
+                id              => $self->id(),
+                href            => $self->href(),
+                'media_type'    => $self->media_type(),
+            );
 }
-
-sub add_item
-{
-    my ($self, @args) = @_;
-    my $item = EPUB::Package::Manifest::Item->new(@args);
-    push @{$self->items()}, $item;
-}
-
-
-
-
 
 no Moose;
 __PACKAGE__->meta->make_immutable;

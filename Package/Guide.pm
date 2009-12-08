@@ -23,6 +23,7 @@
 # SUCH DAMAGE.
 package EPUB::Package::Guide;
 use Moose;
+use EPUB::Package::Guide::Reference;
 
 has references => (
     traits     => ['Array'],

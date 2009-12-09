@@ -99,7 +99,7 @@ sub add_date
 sub add_identifier
 {
     my ($self, $ident, $scheme) = @_;
-    my @attr;
+    my @attr = ('id', 'BookId');
     if (defined($scheme)) {
         push @attr, "opf:scheme", $scheme;
     }

@@ -56,7 +56,7 @@ sub write
     print $MIMETYPE "application/epub+zip";
     close $MIMETYPE;
     
-    $self->writeContainer($tmp_container);
+    $self->write_container($tmp_container);
     $zip->addFile($tmp_container, "META-INF/container.xml");
     $zip->addFile($tmp_mimetype, "mimetype");
 

@@ -31,6 +31,10 @@ use EPUB::Package::Guide;
 use EPUB::Package::Spine;
 use EPUB::Package::NCX;
 
+use EPUB::Container::Zip;
+
+use File::Temp qw/tempdir/;
+
 has metadata    => (
     isa     => 'Object', 
     is      => 'ro',
@@ -67,16 +71,19 @@ has uid         => (
 );
 
 has id_counters => ( isa => 'HashRef', is => 'ro', default =>  sub { {} });
+has tmpdir => ( isa => 'Str', is => 'rw', default =>  sub { tempdir( CLEANUP => 1 ); });
 
 sub BUILD
 {
     my ($self) = @_;
     $self->manifest->add_item(
         id          => 'ncx',
-        href        => 'book.ncx', 
+        href        => 'OPS/book.ncx', 
         media_type  => 'application/x-dtbncx+xml'
     );
+
     $self->spine->toc('ncx');
+    mkdir ($self->tmpdir . "/OPS") or die "Can't make OPS dir in " . $self->tmpdir;
 }
 
 sub to_xml
@@ -134,14 +141,14 @@ sub set_identifier
     $self->ncx->uid($ident);
 }
 
-sub add_xhtml
+sub add_xhtml_entry
 {
     my ($self, $filename, %opts) = @_;
     my $linear = 1;
 
-    if ($opts{'linear'} eq 'no') {
-        $linear = 0;
-    }
+    $linear = 0 if (defined ($opts{'linear'}) && 
+            $opts{'linear'} eq 'no');
+
 
     my $id = $self->nextid('ch');
     $self->manifest->add_item(
@@ -156,7 +163,7 @@ sub add_xhtml
     );
 }
 
-sub add_stylesheet
+sub add_stylesheet_entry
 {
     my ($self, $filename) = @_;
     my $id = $self->nextid('css');
@@ -167,7 +174,7 @@ sub add_stylesheet
     );
 }
 
-sub add_image
+sub add_image_entry
 {
     my ($self, $filename, $type) = @_;
     # trying to guess
@@ -200,7 +207,71 @@ sub add_image
     return $id;
 }
 
+sub add_xhtml
+{
+    my ($self, $filename, $data, %opts) = @_;
+    my $tmpdir = $self->tmpdir;
+    open F, "> $tmpdir/OPS/$filename";
+    print F $data;
+    close F;
+    $self->add_xhtml_entry("OPS/$filename", %opts);
+}
 
+sub add_stylesheet
+{
+    my ($self, $filename, $data) = @_;
+    my $tmpdir = $self->tmpdir;
+    open F, "> $tmpdir/OPS/$filename";
+    print F $data;
+    close F;
+    $self->add_stylesheet_entry("OPS/$filename");
+}
+
+sub add_image
+{
+    my ($self, $filename, $data, $type) = @_;
+    my $tmpdir = $self->tmpdir;
+    open F, "> $tmpdir/OPS/$filename";
+    print F $data;
+    close F;
+    $self->add_image_entry("OPS/$filename", $type);
+}
+
+sub copy_xhtml
+{
+    my ($self, $src_filename, $filename, %opts) = @_;
+    my $tmpdir = $self->tmpdir;
+    if (copy($src_filename, "$tmpdir/OPS/$filename")) {
+        $self->add_xhtml_entry("OPS/$filename");
+    }
+    else {
+        warn ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
+    }
+}
+
+sub copy_stylesheet
+{
+    my ($self, $src_filename, $filename) = @_;
+    my $tmpdir = $self->tmpdir;
+    if (copy($src_filename, "$tmpdir/OPS/$filename")) {
+        $self->add_stylesheet_entry("OPS/$filename");
+    }
+    else {
+        warn ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
+    }
+}
+
+sub copy_image
+{
+    my ($self, $src_filename, $filename, $type) = @_;
+    my $tmpdir = $self->tmpdir;
+    if (copy($src_filename, "$tmpdir/OPS/$filename")) {
+        $self->add_image_entry("OPS/$filename");
+    }
+    else {
+        warn ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
+    }
+}
 
 sub nextid
 {
@@ -220,6 +291,36 @@ sub nextid
     }
 
     return $id;
+}
+
+sub pack_zip
+{
+    my ($self, $filename) = @_;
+    my $tmpdir = $self->tmpdir;
+    $self->write_ncx("$tmpdir/OPS/book.ncx");
+    $self->write_opf("$tmpdir/OPS/content.opf");
+    my $container = EPUB::Container::Zip->new($filename);
+    $container->add_path($tmpdir . "/OPS", "OPS/");
+    $container->add_root_file("OPS/content.opf", "application/oebps-package+xml");
+    $container->write();
+}
+
+sub write_opf
+{
+    my ($self, $filename) = @_;
+    open F, "> $filename" or die "Failed to create OPF file: $filename";
+    my $xml = $self->to_xml();
+    print F $xml;
+    close F;
+}
+
+sub write_ncx
+{
+    my ($self, $filename) = @_;
+    open F, "> $filename" or die "Failed to create NCX file: $filename";
+    my $xml = $self->ncx->to_xml();
+    print F $xml;
+    close F;
 }
 
 no Moose;

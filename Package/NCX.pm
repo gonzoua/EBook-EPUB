@@ -59,6 +59,7 @@ sub to_xml
     $self->create_navmap($writer);
 
     $writer->endTag('ncx');
+    $writer->end();
 
     return $xml;
 }

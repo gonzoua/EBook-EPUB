@@ -29,29 +29,36 @@ use EPUB::Package::Metadata;
 use EPUB::Package::Manifest;
 use EPUB::Package::Guide;
 use EPUB::Package::Spine;
+use EPUB::Package::NCX;
 
 has metadata    => (
     isa     => 'Object', 
     is      => 'ro',
-    default => sub { EPUB::Package::Metadata->new() }
+    default => sub { EPUB::Package::Metadata->new() },
 );
 
 has manifest    => (
     isa     => 'Object', 
     is      => 'ro',
-    default => sub { EPUB::Package::Manifest->new() }
+    default => sub { EPUB::Package::Manifest->new() },
 );
 
 has spine       => (
     isa     => 'Object', 
     is      => 'ro',
-    default => sub { EPUB::Package::Spine->new() }
+    default => sub { EPUB::Package::Spine->new() },
 );
 
 has guide       => (
     isa     => 'Object', 
     is      => 'ro',
-    default => sub { EPUB::Package::Guide->new() }
+    default => sub { EPUB::Package::Guide->new() },
+);
+
+has ncx     => (
+    isa     => 'Object', 
+    is      => 'ro',
+    default => sub { EPUB::Package::NCX->new() },
 );
 
 has uid         => (
@@ -59,20 +66,160 @@ has uid         => (
     is      => 'rw',
 );
 
-sub encode
-{
-    my ($self, $writer) = @_;
+has id_counters => ( isa => 'HashRef', is => 'ro', default =>  sub { {} });
 
-    $writer->startTag("package", 
-        xmlns               => "http://www.idpf.org/2007/opf",
-        version             => "2.0",
-        'unique-identifier' => $self->uid(),
+sub BUILD
+{
+    my ($self) = @_;
+    $self->manifest->add_item(
+        id          => 'ncx',
+        href        => 'book.ncx', 
+        media_type  => 'application/x-dtbncx+xml'
+    );
+    $self->spine->toc('ncx');
+}
+
+sub to_xml
+{
+    my ($self) = @_;
+    my $xml;
+
+    my $writer = XML::Writer->new(
+        OUTPUT      => \$xml,
+        DATA_MODE   => 1,
+        DATA_INDENT => 2,
+    );
+
+    $writer->xmlDecl();
+    $writer->startTag('package', 
+        xmlns               => 'http://www.idpf.org/2007/opf',
+        version             => '2.0',
+        'unique-identifier' => 'BookId',
     );
     $self->metadata->encode($writer);
     $self->manifest->encode($writer);
     $self->spine->encode($writer);
     $self->guide->encode($writer);
-    $writer->endTag("package");
+    $writer->endTag('package');
+    $writer->end();
+
+    return $xml;
+}
+
+sub set_title
+{
+    my ($self, $title) = @_;
+    # XXX: make it set_title?
+    $self->metadata->add_title($title);
+    $self->ncx->title($title);
+}
+
+sub add_translator
+{
+    my ($self, $translator) = @_;
+    $self->metadata->add_translator($translator);
+}
+
+sub add_author
+{
+    my ($self, $author) = @_;
+    $self->metadata->add_author($author);
+    $self->ncx->author($author);
+}
+
+sub set_identifier
+{
+    my ($self, $ident, $scheme) = @_;
+    $self->metadata->add_identifier($ident, $scheme);
+    $self->ncx->uid($ident);
+}
+
+sub add_xhtml
+{
+    my ($self, $filename, %opts) = @_;
+    my $linear = 1;
+
+    if ($opts{'linear'} eq 'no') {
+        $linear = 0;
+    }
+
+    my $id = $self->nextid('ch');
+    $self->manifest->add_item(
+        id          => $id,
+        href        => $filename,
+        media_type  => 'application/xhtml+xml',
+    );
+
+    $self->spine->add_itemref(
+        idref       => $id,
+        linear      => $linear,
+    );
+}
+
+sub add_stylesheet
+{
+    my ($self, $filename) = @_;
+    my $id = $self->nextid('css');
+    $self->manifest->add_item(
+        id          => $id,
+        href        => $filename,
+        media_type  => 'text/css',
+    );
+}
+
+sub add_image
+{
+    my ($self, $filename, $type) = @_;
+    # trying to guess
+    if (!defined($type)) {
+        if (($filename =~ /\.jpg$/i) || ($filename =~ /\.jpeg$/i)) {
+            $type = 'image/jpeg';
+        }
+        elsif ($filename =~ /\.gif$/i) {
+            $type = 'image/gif';
+        }
+        elsif ($filename =~ /\.png$/i) {
+            $type = 'image/png';
+        }
+        elsif ($filename =~ /\.svg$/i) {
+            $type = 'image/svg+xml';
+        }
+        else {
+            croak ("Unknown image type for file $filename");
+            return;
+        }
+    }
+
+    my $id = $self->nextid('img');
+    $self->manifest->add_item(
+        id          => $id,
+        href        => $filename,
+        media_type  => $type,
+    );
+
+    return $id;
+}
+
+
+
+sub nextid
+{
+    my ($self, $prefix) = @_;
+    my $id;
+
+    $prefix = 'id' unless(defined($prefix));
+    if (defined(${$self->id_counters}{$prefix})) {
+        $id = "$prefix" . ${$self->id_counters}{$prefix};
+        ${$self->id_counters}{$prefix}++;
+    }
+    else
+    {
+        # First usage of prefix
+        $id = "${prefix}1";
+        ${$self->id_counters}{$prefix} = 2;
+    }
+
+    return $id;
 }
 
 no Moose;

@@ -32,7 +32,7 @@ sub encode
     $writer->emptyTag("item", 
                 id              => $self->id(),
                 href            => $self->href(),
-                'media_type'    => $self->media_type(),
+                'media-type'    => $self->media_type(),
             );
 }
 

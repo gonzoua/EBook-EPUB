@@ -151,6 +151,7 @@ sub add_xhtml_entry
 
 
     my $id = $self->nextid('ch');
+    print ">>> $filename\n";
     $self->manifest->add_item(
         id          => $id,
         href        => $filename,
@@ -214,7 +215,7 @@ sub add_xhtml
     open F, ">:utf8", "$tmpdir/OPS/$filename";
     print F $data;
     close F;
-    $self->add_xhtml_entry("OPS/$filename", %opts);
+    $self->add_xhtml_entry("$filename", %opts);
 }
 
 sub add_stylesheet
@@ -224,7 +225,7 @@ sub add_stylesheet
     open F, ">:utf8", "$tmpdir/OPS/$filename";
     print F $data;
     close F;
-    $self->add_stylesheet_entry("OPS/$filename");
+    $self->add_stylesheet_entry("$filename");
 }
 
 sub add_image
@@ -235,7 +236,7 @@ sub add_image
     binmode F;
     print F $data;
     close F;
-    $self->add_image_entry("OPS/$filename", $type);
+    $self->add_image_entry("$filename", $type);
 }
 
 sub copy_xhtml
@@ -243,7 +244,7 @@ sub copy_xhtml
     my ($self, $src_filename, $filename, %opts) = @_;
     my $tmpdir = $self->tmpdir;
     if (copy($src_filename, "$tmpdir/OPS/$filename")) {
-        $self->add_xhtml_entry("OPS/$filename");
+        $self->add_xhtml_entry("$filename");
     }
     else {
         warn ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
@@ -255,7 +256,7 @@ sub copy_stylesheet
     my ($self, $src_filename, $filename) = @_;
     my $tmpdir = $self->tmpdir;
     if (copy($src_filename, "$tmpdir/OPS/$filename")) {
-        $self->add_stylesheet_entry("OPS/$filename");
+        $self->add_stylesheet_entry("$filename");
     }
     else {
         warn ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
@@ -267,7 +268,7 @@ sub copy_image
     my ($self, $src_filename, $filename, $type) = @_;
     my $tmpdir = $self->tmpdir;
     if (copy($src_filename, "$tmpdir/OPS/$filename")) {
-        $self->add_image_entry("OPS/$filename");
+        $self->add_image_entry("$filename");
     }
     else {
         warn ("Failed to copy $src_filename to $tmpdir/OPS/$filename");

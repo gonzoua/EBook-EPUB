@@ -38,7 +38,7 @@ sub encode
     $writer->startTag('navLabel');
     $writer->dataElement('text', $self->label);
     $writer->endTag('navLabel');
-    $writer->epmtyElement('content',
+    $writer->emptyTag('content',
         src         => $self->content,
     );
     $writer->endTag('navPoint');

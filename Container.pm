@@ -64,7 +64,8 @@ sub add_path
     my $file_cb = sub {
         my $file = $File::Find::name;
         my $dest = $file;
-        $dest =~ s/$from_path/$container_path/;
+        $dest =~ s/\Q$from_path\E/$container_path/;
+        print "-> $dest\n";
 
         # XXX: UNIX only
         if (-d $file) {

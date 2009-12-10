@@ -211,7 +211,7 @@ sub add_xhtml
 {
     my ($self, $filename, $data, %opts) = @_;
     my $tmpdir = $self->tmpdir;
-    open F, "> $tmpdir/OPS/$filename";
+    open F, ">:utf8", "$tmpdir/OPS/$filename";
     print F $data;
     close F;
     $self->add_xhtml_entry("OPS/$filename", %opts);
@@ -221,7 +221,7 @@ sub add_stylesheet
 {
     my ($self, $filename, $data) = @_;
     my $tmpdir = $self->tmpdir;
-    open F, "> $tmpdir/OPS/$filename";
+    open F, ">:utf8", "$tmpdir/OPS/$filename";
     print F $data;
     close F;
     $self->add_stylesheet_entry("OPS/$filename");
@@ -232,6 +232,7 @@ sub add_image
     my ($self, $filename, $data, $type) = @_;
     my $tmpdir = $self->tmpdir;
     open F, "> $tmpdir/OPS/$filename";
+    binmode F;
     print F $data;
     close F;
     $self->add_image_entry("OPS/$filename", $type);
@@ -308,7 +309,7 @@ sub pack_zip
 sub write_opf
 {
     my ($self, $filename) = @_;
-    open F, "> $filename" or die "Failed to create OPF file: $filename";
+    open F, ">:utf8", $filename or die "Failed to create OPF file: $filename";
     my $xml = $self->to_xml();
     print F $xml;
     close F;
@@ -317,7 +318,7 @@ sub write_opf
 sub write_ncx
 {
     my ($self, $filename) = @_;
-    open F, "> $filename" or die "Failed to create NCX file: $filename";
+    open F, ">:utf8", $filename or die "Failed to create NCX file: $filename";
     my $xml = $self->ncx->to_xml();
     print F $xml;
     close F;

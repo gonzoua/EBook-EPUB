@@ -46,21 +46,19 @@ sub write
 {
     my ($self) = @_;
     my $zip = Archive::Zip->new();
+
+    # mimetype should come first
+    $zip->addString("application/epub+zip", "mimetype");
+
     foreach my $f (@{$self->{files}}) {
         $zip->addFileOrDirectory($f->{frompath}, 
             $f->{containerpath});
     }
 
     my $tmp_container = mktemp("containerXXXXX");
-    my ($MIMETYPE, $tmp_mimetype) = mkstemp( "mimetypeXXXXX" );
-    print $MIMETYPE "application/epub+zip";
-    close $MIMETYPE;
-    
     $self->write_container($tmp_container);
     $zip->addFile($tmp_container, "META-INF/container.xml");
-    $zip->addFile($tmp_mimetype, "mimetype");
 
     $zip->writeToFileNamed($self->{zipfile});
     unlink($tmp_container);
-    unlink($tmp_mimetype);
 }

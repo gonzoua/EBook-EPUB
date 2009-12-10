@@ -63,6 +63,9 @@ has ncx     => (
     isa     => 'Object', 
     is      => 'ro',
     default => sub { EPUB::Package::NCX->new() },
+    handles => {
+        add_navpoint    => 'add_navpoint',
+    },
 );
 
 has uid         => (
@@ -78,7 +81,7 @@ sub BUILD
     my ($self) = @_;
     $self->manifest->add_item(
         id          => 'ncx',
-        href        => 'OPS/book.ncx', 
+        href        => 'book.ncx', 
         media_type  => 'application/x-dtbncx+xml'
     );
 
@@ -119,6 +122,12 @@ sub set_title
     # XXX: make it set_title?
     $self->metadata->add_title($title);
     $self->ncx->title($title);
+}
+
+sub add_language
+{
+    my ($self, $lang) = @_;
+    $self->metadata->add_language($lang);
 }
 
 sub add_translator

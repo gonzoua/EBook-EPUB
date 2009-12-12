@@ -38,11 +38,14 @@ has references => (
 sub encode
 {
     my ($self, $writer) = @_;
-    $writer->startTag("guide");
-    foreach my $ref ($self->all_references()) {
-        $ref->encode($writer);
+    # Only if there are any items
+    if ($self->all_references) {
+            $writer->startTag("guide");
+            foreach my $ref ($self->all_references()) {
+                $ref->encode($writer);
+            }
+            $writer->endTag("guide");
     }
-    $writer->endTag("guide");
 }
 
 sub add_reference

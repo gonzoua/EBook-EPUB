@@ -23,7 +23,7 @@
 # SUCH DAMAGE.
 package EPUB::Package::NCX;
 use Moose;
-# use EPUB::Package::NCX::NavPoint;
+use EPUB::Package::NCX::NavPoint;
 
 # Very simplified module for generation NCX
 

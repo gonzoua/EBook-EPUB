@@ -160,7 +160,6 @@ sub add_xhtml_entry
 
 
     my $id = $self->nextid('ch');
-    print ">>> $filename\n";
     $self->manifest->add_item(
         id          => $id,
         href        => $filename,

@@ -34,6 +34,7 @@ use EPUB::Package::NCX;
 use EPUB::Container::Zip;
 
 use File::Temp qw/tempdir/;
+use File::Copy;
 
 has metadata    => (
     isa     => 'Object', 
@@ -277,6 +278,23 @@ sub copy_image
     my $tmpdir = $self->tmpdir;
     if (copy($src_filename, "$tmpdir/OPS/$filename")) {
         $self->add_image_entry("$filename");
+    }
+    else {
+        warn ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
+    }
+}
+
+sub copy_file
+{
+    my ($self, $src_filename, $filename, $type) = @_;
+    my $tmpdir = $self->tmpdir;
+    if (copy($src_filename, "$tmpdir/OPS/$filename")) {
+        my $id = $self->nextid('id');
+        $self->manifest->add_item(
+            id          => $id,
+            href        => "OPS/$filename",
+            media_type  => $type,
+        );
     }
     else {
         warn ("Failed to copy $src_filename to $tmpdir/OPS/$filename");

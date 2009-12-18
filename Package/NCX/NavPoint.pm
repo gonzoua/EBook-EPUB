@@ -26,6 +26,11 @@ use Moose;
 
 has [qw/label id content class/] => ( isa => 'Str', is => 'rw' );
 has play_order => ( isa => 'Int', is => 'rw' );
+has navpoints => (
+    is         => 'ro',
+    isa        => 'ArrayRef[Object]',
+    default    => sub { [] },
+);
 
 sub encode
 {
@@ -41,7 +46,20 @@ sub encode
     $writer->emptyTag('content',
         src         => $self->content,
     );
+
+    # subpoints
+    foreach my $point (@{$self->navpoints}) {
+        $point->encode($writer);
+    }
+
     $writer->endTag('navPoint');
+}
+
+sub add_navpoint
+{
+    my ($self, @args) = @_;
+    my $subpoint = EPUB::Package::NCX::NavPoint->new(@args);
+    push @{$self->navpoints}, $subpoint;
 }
 
 no Moose;

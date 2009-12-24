@@ -60,6 +60,8 @@ sub add_navpoint
     my ($self, @args) = @_;
     my $subpoint = EPUB::Package::NCX::NavPoint->new(@args);
     push @{$self->navpoints}, $subpoint;
+
+    return $subpoint;
 }
 
 no Moose;

@@ -82,7 +82,7 @@ sub BUILD
     my ($self) = @_;
     $self->manifest->add_item(
         id          => 'ncx',
-        href        => 'book.ncx', 
+        href        => 'toc.ncx', 
         media_type  => 'application/x-dtbncx+xml'
     );
 
@@ -325,7 +325,7 @@ sub pack_zip
 {
     my ($self, $filename) = @_;
     my $tmpdir = $self->tmpdir;
-    $self->write_ncx("$tmpdir/OPS/book.ncx");
+    $self->write_ncx("$tmpdir/OPS/toc.ncx");
     $self->write_opf("$tmpdir/OPS/content.opf");
     my $container = EPUB::Container::Zip->new($filename);
     $container->add_path($tmpdir . "/OPS", "OPS/");

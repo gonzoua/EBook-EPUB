@@ -253,7 +253,7 @@ sub copy_xhtml
     my ($self, $src_filename, $filename, %opts) = @_;
     my $tmpdir = $self->tmpdir;
     if (copy($src_filename, "$tmpdir/OPS/$filename")) {
-        $self->add_xhtml_entry("$filename");
+        $self->add_xhtml_entry($filename, %opts);
     }
     else {
         warn ("Failed to copy $src_filename to $tmpdir/OPS/$filename");

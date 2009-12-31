@@ -23,6 +23,8 @@
 # SUCH DAMAGE.
 
 package EPUB::Package;
+our $VERSION = '0.01';
+
 use Moose;
 
 use EPUB::Package::Metadata;
@@ -217,6 +219,17 @@ sub add_image_entry
     return $id;
 }
 
+sub add_entry
+{
+    my ($self, $filename, $type) = @_;
+    my $id = $self->nextid('item');
+    $self->manifest->add_item(
+        id          => $id,
+        href        => $filename,
+        media_type  => $type,
+    );
+}
+
 sub add_xhtml
 {
     my ($self, $filename, $data, %opts) = @_;
@@ -224,7 +237,7 @@ sub add_xhtml
     open F, ">:utf8", "$tmpdir/OPS/$filename";
     print F $data;
     close F;
-    $self->add_xhtml_entry("$filename", %opts);
+    $self->add_xhtml_entry($filename, %opts);
 }
 
 sub add_stylesheet
@@ -234,7 +247,7 @@ sub add_stylesheet
     open F, ">:utf8", "$tmpdir/OPS/$filename";
     print F $data;
     close F;
-    $self->add_stylesheet_entry("$filename");
+    $self->add_stylesheet_entry($filename);
 }
 
 sub add_image
@@ -245,7 +258,18 @@ sub add_image
     binmode F;
     print F $data;
     close F;
-    $self->add_image_entry("$filename", $type);
+    $self->add_image_entry($filename, $type);
+}
+
+sub add_data
+{
+    my ($self, $filename, $data, $type) = @_;
+    my $tmpdir = $self->tmpdir;
+    open F, "> $tmpdir/OPS/$filename";
+    binmode F;
+    print F $data;
+    close F;
+    $self->add_entry($filename, $type);
 }
 
 sub copy_xhtml
@@ -352,5 +376,141 @@ sub write_ncx
 }
 
 no Moose;
+__PACKAGE__->meta->make_immutable;
 
 1;
+
+__END__
+=head1 NAME
+
+EPUB::Package - module for building OPF documents 
+
+=head1 VERSION
+
+Version 0.01
+
+
+=head1 SYNOPSIS
+
+    use EPUB::Package;
+
+    # Create package object
+    my $package = EPUB::Package->new;
+
+    # Set metadata: title/author/language/id
+    $package->set_title('Three Men in a Boat');
+    $package->add_author('Jerome K. Jerome');
+    $package->add_language('en');
+    $package->set_identifier('0765341611');
+
+    # Add package content: stylesheet, font, xhtml
+    $package->copy_stylesheet('/path/to/style.css', 'style.css');
+    $package->copy_file('/path/to/CharisSILB.ttf', 
+        'CharisSILB.ttf', 'application/x-font-ttf');
+    $package->copy_xhtml('/path/to/page1.xhtml', 'page1.xhtml');
+    $package->copy_xhtml('/path/to/notes.xhtml', 'notes.xhtml',
+        linear => 'no'
+    );
+
+    # Generate resulting ebook
+    $package->pack_zip('/path/to/three_men_in_a_boat.epub');
+
+=head1 SUBROUTINES/METHODS
+
+=over 4
+
+=item new([$params])
+
+Create an EPUB::Package object
+
+=item set_title($title)
+
+Set the title of the book
+
+=item add_language($lang)
+
+Add language to the list of document languages. At least one is 
+required. $lang should be in RFC 3066 format or its successors 
+such as the newer RFC 4646
+
+=item add_author($name)
+
+Add author to the list of document authors
+
+=item add_translator($name)
+
+Add translator to the list of document translators
+
+=item set_identifier($id)
+
+Set a unique identifier for the book, such as its ISBN or a URL
+
+=item add_xhtml($data, $filename, %opts)
+
+Add xhtml data $data to $filename in package. 
+
+%opts is an anonymous hash array of parameters:
+
+=over 4
+
+=item linear 
+
+'yes' or 'no'
+
+=back 
+
+=item add_stylesheet($data, $filename)
+
+Add stylesheet data $data as $filename in package
+
+=item add_image($data, $filename, $type)
+
+Add image data $data as $filename in package with content type $type (e.g. image/jpeg)
+
+=item copy_xhtml($source_file, $filename, %opts)
+
+Add existing xhtml file $source_file as $filename in package. 
+
+%opts is an anonymous hash array of parameters:
+
+=over 4
+
+=item linear 
+
+'yes' or 'no'
+
+=back 
+
+=item copy_stylesheet($source_file, $filename)
+
+Add existing css file $source_file as $filename in package
+
+=item copy_image($source_file, $filename, $type)
+
+Add existing image file $source_file as $filename in package and set its content type to $type (e.g. image/jpeg)
+
+=item copy_file($source_file, $filename, $type)
+
+Add existing file $source_file as $filename in package and set its content type to $type (e.g. text/plain)
+
+=item pack_zip($filename)
+
+Generate OCF Zip container with contents of current package
+
+=back
+
+=head1 AUTHOR
+
+Oleksandr Tymoshenko, E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to  E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2009 Oleksandr Tymoshenko.
+
+This module is free software; you can redistribute it and/or
+modify it under the terms of the BSD license. See the F<LICENSE> file
+included with this distribution.

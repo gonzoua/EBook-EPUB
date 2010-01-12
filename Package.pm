@@ -1,4 +1,4 @@
-# Copyright (c) 2009 Oleksandr Tymoshenko <gonzo@bluezbox.com>
+# Copyright (c) 2009, 2010 Oleksandr Tymoshenko <gonzo@bluezbox.com>
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without
@@ -509,7 +509,7 @@ Please report any bugs or feature requests to  E<lt>gonzo@bluezbox.comE<gt>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2009 Oleksandr Tymoshenko.
+Copyright 2009, 2010 Oleksandr Tymoshenko.
 
 This module is free software; you can redistribute it and/or
 modify it under the terms of the BSD license. See the F<LICENSE> file

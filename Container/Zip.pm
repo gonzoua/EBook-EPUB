@@ -62,3 +62,54 @@ sub write
     $zip->writeToFileNamed($self->{zipfile});
     unlink($tmp_container);
 }
+
+__END__
+
+=head1 NAME
+
+EPUB::Container::Zip
+
+=head1 SYNOPSIS
+
+Zip OEPBS Container implementation
+
+    my $container = EPUB::Container::Zip->new('/path/to/file.epub')
+
+    # EPUB::Container methods
+    $container->add_path('/path/to/content.ncx', 'DATA/content.nx');
+    $container->add_path('/path/to/page1.xhtml', 'DATA/page1.xhtml');
+    $container->add_path('/path/to/page2.xhtml', 'DATA/page2.xhtml');
+    $container->add_root_file('DATA/content.ncx');
+
+    # Write it to disk
+    $container->write();
+
+=head1 SUBROUTINES/METHODS
+
+=over 4
+
+=item new($zipfile)
+
+Create new instance of EPUB::Container::Zip object. $zipfile is a file where container should be saved 
+
+=item write()
+
+Create zip file with container contents
+
+=back
+
+=head1 AUTHOR
+
+Oleksandr Tymoshenko, E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to  E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2009, 2010 Oleksandr Tymoshenko.
+
+This module is free software; you can redistribute it and/or
+modify it under the terms of the BSD license. See the F<LICENSE> file
+included with this distribution.

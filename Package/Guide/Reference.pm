@@ -51,3 +51,102 @@ no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+__END__
+
+=head1 NAME
+
+EPUB::Package::Guide::Reference
+
+=head1 SYNOPSIS
+
+Reference for E<lt>guideE<gt> element of OPF file.
+
+=head1 SUBROUTINES/METHODS
+
+=over 4
+
+=item new(%opts)
+
+%opts is an anonymous hash that might containe followig keys:
+
+    type
+    href
+    title
+
+=item encode($xmlwriter)
+
+Encode object to XML form using XML::Writer instance
+
+=item href([$href])
+
+Get/set reference to an OPS Content Document included in the 
+manifest, and which may include a fragment identifier as defined 
+in section 4.1 of RFC 2396
+
+=item title([$title])
+
+Human-readable description of reference
+
+=item type([$type])
+
+Get/set type of reference. Possible values:
+
+=over 4
+
+=item cover
+
+=item title-page
+
+=item toc
+
+=item index
+
+=item glossary
+
+=item acknowledgements
+
+=item bibliography
+
+=item colophon
+
+=item copyright-page
+
+=item dedication
+
+=item epigraph
+
+=item foreword
+
+=item loi
+
+=item lot
+
+=item notes
+
+=item preface
+
+=item text
+
+=back 
+
+For detailed description refer to section 2.6 of OPF specification or 
+Chicago Manual of Style
+
+=back
+
+=head1 AUTHOR
+
+Oleksandr Tymoshenko, E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to  E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2009, 2010 Oleksandr Tymoshenko.
+
+This module is free software; you can redistribute it and/or
+modify it under the terms of the BSD license. See the F<LICENSE> file
+included with this distribution.

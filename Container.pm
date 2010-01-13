@@ -145,3 +145,54 @@ sub write_container
 }
 
 1;
+
+__END__;
+
+=head1 NAME
+
+EPUB::Container
+
+=head1 SYNOPSIS
+
+Abstract OEPBS Container implementation
+
+    my $container = EPUB::Container->new()
+    $container->add_path('/path/to/content.ncx', 'DATA/content.ncx');
+    $container->add_path('/path/to/page1.xhtml', 'DATA/page1.xhtml');
+    $container->add_path('/path/to/page2.xhtml', 'DATA/page2.xhtml');
+    $container->add_root_file('DATA/content.ncx');
+
+=head1 SUBROUTINES/METHODS
+
+=over 4
+
+=item new()
+
+Create new instance of EPUB::Container object
+
+=item add_path($file_path, $container_path)
+
+Add existing file into container
+
+
+=item add_root_path($container_path)
+
+Set file in container to be root file
+
+=back
+
+=head1 AUTHOR
+
+Oleksandr Tymoshenko, E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to  E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2009, 2010 Oleksandr Tymoshenko.
+
+This module is free software; you can redistribute it and/or
+modify it under the terms of the BSD license. See the F<LICENSE> file
+included with this distribution.

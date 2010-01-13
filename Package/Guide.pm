@@ -59,3 +59,61 @@ no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+__END__
+=head1 NAME
+
+EPUB::Package::Guide
+
+=head1 SYNOPSIS
+
+Class that represents B<guide> element of OPF document
+
+=head1 DESCRIPTION
+
+The B<guide> element identifies fundamental structural components of the
+publication, to enable Reading Systems to provide convenient access to them.
+
+The structural components of the books are listed in B<reference> elements
+contained within the B<guide> element. These components could refer to the
+table of contents, list of illustrations, foreword, bibliography, and many
+other standard parts of the book. Reading Systems are not required to use the
+B<guide> element in any way.
+
+See section 2.6 of OPF specification
+
+=head1 SUBROUTINES/METHODS
+
+=over 4
+
+=item add_reference(%opts)
+
+Add reference to guide element. %opts is an anonymous hash, for possible key
+values see EPUB::Package::Guide::Reference
+
+=item encode($xmlwriter)
+
+Encode object to XML form using XML::Writer instance
+
+=item new()
+
+Create new object
+
+=back
+
+=head1 AUTHOR
+
+Oleksandr Tymoshenko, E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to  E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2009, 2010 Oleksandr Tymoshenko.
+
+This module is free software; you can redistribute it and/or
+modify it under the terms of the BSD license. See the F<LICENSE> file
+included with this distribution.
+

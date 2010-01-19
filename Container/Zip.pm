@@ -110,6 +110,8 @@ Please report any bugs or feature requests to  E<lt>gonzo@bluezbox.comE<gt>
 
 Copyright 2009, 2010 Oleksandr Tymoshenko.
 
+L<http://bluezbox.com>
+
 This module is free software; you can redistribute it and/or
 modify it under the terms of the BSD license. See the F<LICENSE> file
 included with this distribution.

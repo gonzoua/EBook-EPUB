@@ -28,10 +28,15 @@ use EPUB::Package::NCX::NavPoint;
 # Very simplified module for generation NCX
 
 has [qw/uid title author/] => ( isa => 'Str', is => 'rw' );
+
 has navpoints => (
+    traits     => ['Array'],
     is         => 'ro',
     isa        => 'ArrayRef[Object]',
     default    => sub { [] },
+    handles    => {
+           all_navpoints => 'elements',
+       },
 );
 
 sub to_xml
@@ -108,7 +113,7 @@ sub create_navmap
 {
     my ($self, $writer) = @_;
     $writer->startTag('navMap');
-    foreach my $point (@{$self->navpoints}) {
+    foreach my $point ($self->all_navpoints) {
         $point->encode($writer);
     }
     $writer->endTag('navMap');
@@ -126,3 +131,81 @@ no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+__END__
+
+=head1 NAME
+
+EPUB::Package::NCX
+
+=head1 SYNOPSIS
+
+Class that "Navigation Center eXtended" file of OPF document
+
+=head1 DESCRIPTION
+
+The Navigation Control file for XML applications (NCX) exposes the hierarchical
+structure of a Publication to allow the user to navigate through it. The NCX is
+similar to a table of contents in that it enables the reader to jump directly
+to any of the major structural elements of the document, i.e. part, chapter, or
+section, but it will often contain more elements of the document than the
+publisher chooses to include in the original print table of contents. It can be
+visualized as a collapsible tree familiar to PC users.
+
+=head1 SUBROUTINES/METHODS
+
+=over 4
+
+=item add_navpoint(%opts)
+
+Add refrence to an OPS Content Document that is a part of publication. %opts is
+an anonymous hash, for possible key values see EPUB::Package::NCX::NavPoint.
+Method returns created EPUB::Package::NCX::NavPoint object that could be used
+later for adding subsections.
+
+=item all_navpoints()
+
+Returns array of EPUB::Package::NCX::NavPoint objects, current content of NCX
+
+=item author([$author)
+
+Get/set book auther
+
+=item new(%opts)
+
+Create new object. %opts is anonymous hash with possible key values:
+    author
+    title
+    uid
+
+=item title([$title)
+
+Get/set book title
+
+=item to_xml()
+
+Returns XML representation of NCX
+
+=item uid([$uid)
+
+Get/set unique identfier for book
+
+=back
+
+=head1 AUTHOR
+
+Oleksandr Tymoshenko, E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to  E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2009, 2010 Oleksandr Tymoshenko.
+
+L<http://bluezbox.com>
+
+This module is free software; you can redistribute it and/or
+modify it under the terms of the BSD license. See the F<LICENSE> file
+included with this distribution.

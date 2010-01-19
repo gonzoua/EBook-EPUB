@@ -27,9 +27,13 @@ use EPUB::Package::Spine::Itemref;
 
 has toc => ( isa => 'Str', is => 'rw' );
 has itemrefs => (
+    traits     => ['Array'],
     is         => 'ro',
     isa        => 'ArrayRef[Object]',
     default    => sub { [] },
+    handles    => {
+           all_itemrefs => 'elements',
+       },
 );
 
 sub encode
@@ -38,9 +42,11 @@ sub encode
     $writer->startTag("spine",
         toc => $self->toc,
     );
+
     foreach my $itemref (@{$self->itemrefs()}) {
         $itemref->encode($writer);
     }
+
     $writer->endTag("spine");
 }
 
@@ -55,3 +61,61 @@ no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+__END__
+
+=head1 NAME
+
+EPUB::Package::Spine
+
+=head1 SYNOPSIS
+
+Class that represents B<spine> element of OPF document
+
+
+=head1 DESCRIPTION
+
+The B<spine> element organizes the associated OPS Content Documents into the linear reading order of the publication.
+
+=head1 SUBROUTINES/METHODS
+
+=over 4
+
+=item add_itemref(%opts)
+
+Add reference an OPS Content Document designated in the B<manifest>. %opts is an anonymous hash, for possible key
+values see EPUB::Package::Spine::Itemref
+
+=item all_references()
+
+Returns array of EPUB::Package::Spine::Itemref objects, current content of B<spine> element
+
+=item encode($xmlwriter)
+
+Encode object to XML form using XML::Writer instance
+
+=item new()
+
+Create new object
+
+=back
+
+
+
+=head1 AUTHOR
+
+Oleksandr Tymoshenko, E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to  E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2009, 2010 Oleksandr Tymoshenko.
+
+L<http://bluezbox.com>
+
+This module is free software; you can redistribute it and/or
+modify it under the terms of the BSD license. See the F<LICENSE> file
+included with this distribution.

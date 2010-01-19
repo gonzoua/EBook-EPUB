@@ -24,6 +24,12 @@
 package EPUB::Package::Metadata::DCItem;
 use Moose;
 
+#
+# Helper class for DC metadata items. Just contains name, value and attributes.
+# values goes as CDATA.
+# End-user should not use this module directly
+#
+
 has [qw/name value/] => (isa => 'Str', is => 'rw');
 has attributes => (
     traits  => ['Array'],

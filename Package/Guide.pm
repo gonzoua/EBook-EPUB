@@ -91,6 +91,10 @@ See section 2.6 of OPF specification
 Add reference to guide element. %opts is an anonymous hash, for possible key
 values see EPUB::Package::Guide::Reference
 
+=item all_references()
+
+Returns array of EPUB::Package::Guide::Reference objects, current content of B<guide> element
+
 =item encode($xmlwriter)
 
 Encode object to XML form using XML::Writer instance
@@ -112,6 +116,8 @@ Please report any bugs or feature requests to  E<lt>gonzo@bluezbox.comE<gt>
 =head1 LICENSE AND COPYRIGHT
 
 Copyright 2009, 2010 Oleksandr Tymoshenko.
+
+L<http://bluezbox.com>
 
 This module is free software; you can redistribute it and/or
 modify it under the terms of the BSD license. See the F<LICENSE> file

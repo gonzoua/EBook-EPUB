@@ -26,9 +26,13 @@ use Moose;
 use EPUB::Package::Manifest::Item;
 
 has items => (
+    traits     => ['Array'],
     is         => 'ro',
     isa        => 'ArrayRef[Object]',
     default    => sub { [] },
+    handles    => {
+           all_items => 'elements',
+       },
 );
 
 sub encode
@@ -48,11 +52,65 @@ sub add_item
     push @{$self->items()}, $item;
 }
 
-
-
-
-
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+__END__
+
+=head1 NAME
+
+EPUB::Package::Manifest
+
+=head1 SYNOPSIS
+
+Class that represents B<manifest> element of OPF document
+
+
+=head1 DESCRIPTION
+
+The required B<manifest> provides a list of all the files that are part of
+the publication (e.g. Content Documents, style sheets, image files, any
+embedded font files, any included schemas).
+
+=head1 SUBROUTINES/METHODS
+
+=over 4
+
+=item add_item(%opts)
+
+Add refrence to an OPS Content Document that is a part of publication. %opts is
+an anonymous hash, for possible key values see EPUB::Package::Manifest::Item
+
+=item all_items()
+
+Returns array of EPUB::Package::Manifest::Item objects, current content of B<manifest> element
+
+=item encode($xmlwriter)
+
+Encode object to XML form using XML::Writer instance
+
+=item new()
+
+Create new object
+
+=back
+
+=head1 AUTHOR
+
+Oleksandr Tymoshenko, E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to  E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2009, 2010 Oleksandr Tymoshenko.
+
+L<http://bluezbox.com>
+
+This module is free software; you can redistribute it and/or
+modify it under the terms of the BSD license. See the F<LICENSE> file
+included with this distribution.

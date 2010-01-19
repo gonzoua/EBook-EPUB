@@ -65,7 +65,6 @@ sub add_path
         my $file = $File::Find::name;
         my $dest = $file;
         $dest =~ s/\Q$from_path\E/$container_path/;
-        print "-> $dest\n";
 
         # XXX: UNIX only
         if (-d $file) {
@@ -192,6 +191,8 @@ Please report any bugs or feature requests to  E<lt>gonzo@bluezbox.comE<gt>
 =head1 LICENSE AND COPYRIGHT
 
 Copyright 2009, 2010 Oleksandr Tymoshenko.
+
+L<http://bluezbox.com>
 
 This module is free software; you can redistribute it and/or
 modify it under the terms of the BSD license. See the F<LICENSE> file

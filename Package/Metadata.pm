@@ -149,3 +149,103 @@ no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+__END__
+
+=head1 NAME
+
+EPUB::Package::Metadata
+
+=head1 SYNOPSIS
+
+Class that represents B<metadata> element of OPF document. Provides information
+about the publication as a whole
+
+=head1 SUBROUTINES/METHODS
+
+=over 4
+
+=item new()
+
+Create new object
+
+=item encode($xmlwriter)
+
+Encode object to XML form using XML::Writer instance
+
+=item add_author($name, [$formal_name])
+
+Add translator of the document. $name is in human-readable form, e.g. "Arthur
+Conan Doyle", $formal_name is in form, suitable for machine processing, e.g.
+"Doyle, Arthur Conan"
+
+=item add_date($date, $event)
+
+Date of publication, in the format defined by "Date and Time Formats" at
+http://www.w3.org/TR/NOTE-datetime and by ISO 8601 on which it is based. In
+particular, dates without times are represented in the form YYYY[-MM[-DD]]: a
+required 4-digit year, an optional 2-digit month, and if the month is given, an
+optional 2-digit day of month.  $event is an optional description of event that
+date refers to. Possible values may include: creation, publication, and
+modification.
+
+=item add_description($description)
+
+Add description of the publication content
+
+=item add_identifier($ident, [$scheme])
+
+Add unique identifier of the publication. $scheme is an optional paramater to
+specify identification system of this particular identifier. e.g. ISDN, DOI
+
+=item add_item($name, $value)
+
+Add metadata item that does not belong to Dublin Core specification. Metadata
+is set by simple name/value pair.
+
+=item add_language($lang)
+
+Add language of the content of the publication. $lang must comply with RFC 3066
+(see http://www.ietf.org/rfc/rfc3066.txt)
+
+=item add_rights($rights)
+
+A statement about rights, or a reference to one. In this specification, the copyright notice and any further rights description should appear directly.
+
+=item add_source($source)
+
+Information regarding a prior resource from which the publication was derived
+
+=item add_subject($subject)
+
+Add subject of the publication
+
+=item add_title($title)
+
+Add title of the publication
+
+=item add_translator($name, [$formal_name])
+
+Add translator of the document. $name is in human-readable form, e.g. "Arthur
+Conan Doyle", $formal_name is in form, suitable for machine processing, e.g.
+"Doyle, Arthur Conan"
+
+=back
+
+=head1 AUTHOR
+
+Oleksandr Tymoshenko, E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to  E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2009, 2010 Oleksandr Tymoshenko.
+
+L<http://bluezbox.com>
+
+This module is free software; you can redistribute it and/or
+modify it under the terms of the BSD license. See the F<LICENSE> file
+included with this distribution.

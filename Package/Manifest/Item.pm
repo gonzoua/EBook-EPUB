@@ -40,3 +40,64 @@ no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+__END__
+
+=head1 NAME
+
+EPUB::Package::Manifest::Item
+
+=head1 SYNOPSIS
+
+Item for E<lt>manifestE<gt> element of OPF file. Each describes a document, an
+image file, a style sheet, or other component that is considered part of the
+publication
+
+=head1 SUBROUTINES/METHODS
+
+=over 4
+
+=item new(%opts)
+
+%opts is an anonymous hash that might containe followig keys:
+
+    id 
+    href 
+    media_type 
+
+=item encode($xmlwriter)
+
+Encode object to XML form using XML::Writer instance
+
+=item id([$id])
+
+Get/set ID of OPS Content Document to which item refers
+
+=item href([$href])
+
+Get/set URI of OPS Content Document to which item refers
+
+=item media_type([$media_type])
+
+Get/set item’s MIME media type.
+
+=back
+
+=head1 AUTHOR
+
+Oleksandr Tymoshenko, E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to  E<lt>gonzo@bluezbox.comE<gt>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2009, 2010 Oleksandr Tymoshenko.
+
+L<http://bluezbox.com>
+
+This module is free software; you can redistribute it and/or
+modify it under the terms of the BSD license. See the F<LICENSE> file
+included with this distribution.
+

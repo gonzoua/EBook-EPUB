@@ -22,7 +22,7 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-package EPUB::Container::Zip;
+package EBook::EPUB::Container::Zip;
 
 use vars qw(@ISA $VERSION);
 @ISA     = qw(EPUB::Container);

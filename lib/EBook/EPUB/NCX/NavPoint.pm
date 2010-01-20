@@ -21,7 +21,7 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
-package EPUB::Package::NCX::NavPoint;
+package EBook::EPUB::NCX::NavPoint;
 use Moose;
 
 has [qw/label id content class/] => ( isa => 'Str', is => 'rw' );
@@ -62,7 +62,7 @@ sub encode
 sub add_navpoint
 {
     my ($self, @args) = @_;
-    my $subpoint = EPUB::Package::NCX::NavPoint->new(@args);
+    my $subpoint = EBook::EPUB::NCX::NavPoint->new(@args);
     push @{$self->navpoints}, $subpoint;
 
     return $subpoint;
@@ -77,7 +77,7 @@ __END__
 
 =head1 NAME
 
-EPUB::Package::NCX::NavPoint
+EBook::EPUB::NCX::NavPoint
 
 =head1 SYNOPSIS
 
@@ -102,12 +102,12 @@ Entry in Navigation Center that refers to part of a document (e.g. chapter)
 Add refrence to an OPS Content Document that is a part of publication,
 subsection of the part current object references to. %opts is an anonymous
 hash, for possible key values see new() method description.  Method returns
-created EPUB::Package::NCX::NavPoint object that could be used later for adding
+created EBook::EPUB::NCX::NavPoint object that could be used later for adding
 subsections.
 
 =item all_navpoints()
 
-Returns array of EPUB::Package::NCX::NavPoint objects, subsections of current one
+Returns array of EBook::EPUB::NCX::NavPoint objects, subsections of current one
 
 =item encode($xmlwriter)
 

@@ -21,10 +21,10 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
-package EPUB::Package::Metadata;
+package EBook::EPUB::Metadata;
 use Moose;
-use EPUB::Package::Metadata::DCItem;
-use EPUB::Package::Metadata::Item;
+use EBook::EPUB::Metadata::DCItem;
+use EBook::EPUB::Metadata::Item;
 
 has items => (
     is         => 'ro',
@@ -170,7 +170,7 @@ sub add_rights
 sub add_dcitem
 {
     my ($self, $name, $value, @attributes) = @_;
-    my $dcitem = EPUB::Package::Metadata::DCItem->new(
+    my $dcitem = EBook::EPUB::Metadata::DCItem->new(
             name        => "dc:$name",
             value       => $value,
             attributes  => \@attributes);
@@ -180,7 +180,7 @@ sub add_dcitem
 sub add_item
 {
     my ($self, $name, $value) = @_;
-    my $item = EPUB::Package::Metadata::Item->new(
+    my $item = EBook::EPUB::Metadata::Item->new(
             name    => $name,
             value   => $value,
         );
@@ -196,7 +196,7 @@ __END__
 
 =head1 NAME
 
-EPUB::Package::Metadata
+EBook::EPUB::Metadata
 
 =head1 SYNOPSIS
 

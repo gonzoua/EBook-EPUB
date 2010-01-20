@@ -22,18 +22,18 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-package EPUB::Package;
+package EBook::EPUB;
 our $VERSION = '0.01';
 
 use Moose;
 
-use EPUB::Package::Metadata;
-use EPUB::Package::Manifest;
-use EPUB::Package::Guide;
-use EPUB::Package::Spine;
-use EPUB::Package::NCX;
+use EBook::EPUB::Metadata;
+use EBook::EPUB::Manifest;
+use EBook::EPUB::Guide;
+use EBook::EPUB::Spine;
+use EBook::EPUB::NCX;
 
-use EPUB::Container::Zip;
+use EBook::EPUB::Container::Zip;
 
 use File::Temp qw/tempdir/;
 use File::Copy;
@@ -41,7 +41,7 @@ use File::Copy;
 has metadata    => (
     isa     => 'Object', 
     is      => 'ro',
-    default => sub { EPUB::Package::Metadata->new() },
+    default => sub { EBook::EPUB::Metadata->new() },
     handles => [ qw/add_author
                     add_contributor
                     add_creator
@@ -64,25 +64,25 @@ has metadata    => (
 has manifest    => (
     isa     => 'Object', 
     is      => 'ro',
-    default => sub { EPUB::Package::Manifest->new() },
+    default => sub { EBook::EPUB::Manifest->new() },
 );
 
 has spine       => (
     isa     => 'Object', 
     is      => 'ro',
-    default => sub { EPUB::Package::Spine->new() },
+    default => sub { EBook::EPUB::Spine->new() },
 );
 
 has guide       => (
     isa     => 'Object', 
     is      => 'ro',
-    default => sub { EPUB::Package::Guide->new() },
+    default => sub { EBook::EPUB::Guide->new() },
 );
 
 has ncx     => (
     isa     => 'Object', 
     is      => 'ro',
-    default => sub { EPUB::Package::NCX->new() },
+    default => sub { EBook::EPUB::NCX->new() },
     handles => [ qw/add_navpoint/ ],
 );
 
@@ -384,7 +384,7 @@ __PACKAGE__->meta->make_immutable;
 __END__
 =head1 NAME
 
-EPUB::Package - module for building OPF documents 
+EBook::EPUB - module for building OPF documents 
 
 =head1 VERSION
 
@@ -393,10 +393,10 @@ Version 0.01
 
 =head1 SYNOPSIS
 
-    use EPUB::Package;
+    use EBook::EPUB;
 
     # Create package object
-    my $package = EPUB::Package->new;
+    my $package = EBook::EPUB->new;
 
     # Set metadata: title/author/language/id
     $package->add_title('Three Men in a Boat');
@@ -422,7 +422,7 @@ Version 0.01
 
 =item new([$params])
 
-Create an EPUB::Package object
+Create an EBook::EPUB object
 
 =item add_title($title)
 
@@ -432,13 +432,13 @@ Set the title of the book
 
 Set a unique identifier for the book, such as its ISBN or a URL
 
-For the rest of metadata-related fields see L<EPUB::Package::Metadata>
+For the rest of metadata-related fields see L<EBook::EPUB::Metadata>
 
 =item add_navpoint(%opts)
 
 Add refrence to an OPS Content Document that is a part of publication. %opts is
-an anonymous hash, for possible key values see L<EPUB::Package::NCX::NavPoint>.
-Method returns created EPUB::Package::NCX::NavPoint object that could be used
+an anonymous hash, for possible key values see L<EBook::EPUB::NCX::NavPoint>.
+Method returns created EBook::EPUB::NCX::NavPoint object that could be used
 later for adding subsections.
 
 =item add_xhtml($data, $filename, %opts)

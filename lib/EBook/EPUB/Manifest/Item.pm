@@ -21,7 +21,7 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
-package EPUB::Package::Manifest::Item;
+package EBook::EPUB::Manifest::Item;
 use Moose;
 
 has [qw/id href media_type/] => ( isa => 'Str', is => 'rw' );
@@ -45,7 +45,7 @@ __END__
 
 =head1 NAME
 
-EPUB::Package::Manifest::Item
+EBook::EPUB::Manifest::Item
 
 =head1 SYNOPSIS
 

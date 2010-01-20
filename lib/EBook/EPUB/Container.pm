@@ -24,7 +24,7 @@
 
 # OEPBS Container format implementation
 # http://www.idpf.org/ocf/ocf1.0/download/ocf10.htm
-package EPUB::Container;
+package EBook::EPUB::Container;
 
 use strict;
 use XML::Writer;

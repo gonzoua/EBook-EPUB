@@ -21,7 +21,7 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
-package EPUB::Package::Spine::Itemref;
+package EBook::EPUB::Spine::Itemref;
 use Moose;
 
 has linear => ( isa => 'Bool', is => 'rw', default => 1 );
@@ -52,7 +52,7 @@ __END__
 
 =head1 NAME
 
-EPUB::Package::Spine::Itemref
+EBook::EPUB::Spine::Itemref
 
 =head1 SYNOPSIS
 

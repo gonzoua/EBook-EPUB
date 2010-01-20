@@ -395,26 +395,26 @@ Version 0.01
 
     use EBook::EPUB;
 
-    # Create package object
-    my $package = EBook::EPUB->new;
+    # Create EPUB object
+    my $epub = EBook::EPUB->new;
 
     # Set metadata: title/author/language/id
-    $package->add_title('Three Men in a Boat');
-    $package->add_author('Jerome K. Jerome');
-    $package->add_language('en');
-    $package->add_identifier('0765341611');
+    $epub->add_title('Three Men in a Boat');
+    $epub->add_author('Jerome K. Jerome');
+    $epub->add_language('en');
+    $epub->add_identifier('0765341611');
 
     # Add package content: stylesheet, font, xhtml
-    $package->copy_stylesheet('/path/to/style.css', 'style.css');
-    $package->copy_file('/path/to/CharisSILB.ttf', 
+    $epub->copy_stylesheet('/path/to/style.css', 'style.css');
+    $epub->copy_file('/path/to/CharisSILB.ttf', 
         'CharisSILB.ttf', 'application/x-font-ttf');
-    $package->copy_xhtml('/path/to/page1.xhtml', 'page1.xhtml');
-    $package->copy_xhtml('/path/to/notes.xhtml', 'notes.xhtml',
+    $epub->copy_xhtml('/path/to/page1.xhtml', 'page1.xhtml');
+    $epub->copy_xhtml('/path/to/notes.xhtml', 'notes.xhtml',
         linear => 'no'
     );
 
     # Generate resulting ebook
-    $package->pack_zip('/path/to/three_men_in_a_boat.epub');
+    $epub->pack_zip('/path/to/three_men_in_a_boat.epub');
 
 =head1 SUBROUTINES/METHODS
 

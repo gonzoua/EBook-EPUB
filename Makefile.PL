@@ -8,7 +8,7 @@ WriteMakefile(
     VERSION_FROM        => 'lib/EBook/EPUB.pm',
     ABSTRACT_FROM       => 'lib/EBook/EPUB.pm',
     ($ExtUtils::MakeMaker::VERSION >= 6.3002
-      ? ('LICENSE'=> 'perl')
+      ? ('LICENSE'=> 'bsd')
       : ()),
     PL_FILES            => {},
     PREREQ_PM => {

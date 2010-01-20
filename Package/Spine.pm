@@ -84,7 +84,7 @@ The B<spine> element organizes the associated OPS Content Documents into the lin
 =item add_itemref(%opts)
 
 Add reference an OPS Content Document designated in the B<manifest>. %opts is an anonymous hash, for possible key
-values see EPUB::Package::Spine::Itemref
+values see L<EPUB::Package::Spine::Itemref>
 
 =item all_references()
 

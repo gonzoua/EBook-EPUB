@@ -101,7 +101,7 @@ Entry in Navigation Center that refers to part of a document (e.g. chapter)
 
 Add refrence to an OPS Content Document that is a part of publication,
 subsection of the part current object references to. %opts is an anonymous
-hash, for possible key values see EPUB::Package::NCX::NavPoint.  Method returns
+hash, for possible key values see new() method description.  Method returns
 created EPUB::Package::NCX::NavPoint object that could be used later for adding
 subsections.
 

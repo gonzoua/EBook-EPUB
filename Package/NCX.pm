@@ -159,7 +159,7 @@ visualized as a collapsible tree familiar to PC users.
 =item add_navpoint(%opts)
 
 Add refrence to an OPS Content Document that is a part of publication. %opts is
-an anonymous hash, for possible key values see EPUB::Package::NCX::NavPoint.
+an anonymous hash, for possible key values see L<EPUB::Package::NCX::NavPoint>.
 Method returns created EPUB::Package::NCX::NavPoint object that could be used
 later for adding subsections.
 

@@ -89,7 +89,7 @@ See section 2.6 of OPF specification
 =item add_reference(%opts)
 
 Add reference to guide element. %opts is an anonymous hash, for possible key
-values see EPUB::Package::Guide::Reference
+values see L<EPUB::Package::Guide::Reference>
 
 =item all_references()
 

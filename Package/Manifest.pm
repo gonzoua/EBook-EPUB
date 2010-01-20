@@ -81,7 +81,7 @@ embedded font files, any included schemas).
 =item add_item(%opts)
 
 Add refrence to an OPS Content Document that is a part of publication. %opts is
-an anonymous hash, for possible key values see EPUB::Package::Manifest::Item
+an anonymous hash, for possible key values see L<EPUB::Package::Manifest::Item>
 
 =item all_items()
 

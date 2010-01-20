@@ -29,7 +29,7 @@ use vars qw(@ISA $VERSION);
 $VERSION = 0.1;
 
 use strict;
-use EPUB::Container;
+use EBook::EPUB::Container;
 use Archive::Zip;
 use File::Temp qw/:mktemp/;
 

@@ -432,7 +432,75 @@ Set the title of the book
 
 Set a unique identifier for the book, such as its ISBN or a URL
 
-For the rest of metadata-related fields see L<EBook::EPUB::Metadata>
+=item add_author($name, [$formal_name])
+
+Add author of the document. For details see add_contributor.
+
+=item add_creator($name, [fileas =E<gt> $formal_name, role =E<gt> $role])
+
+Add primary creator or author of the publication of the publication. See
+add_contributor for details
+
+
+=item add_contributor($name, [fileas =E<gt> $formal_name, role =E<gt>])
+
+Add person/organization that contributed to publication. $name is the name in
+human-readable form, e.g. "Arthur Conan Doyle", $formal_name is in form,
+suitable for machine processing, e.g.  "Doyle, Arthur Conan". $role reflects
+kind of contribution to document. See Section 2.2.6 of OPF specification for
+list of possible values L<http://www.idpf.org/2007/opf/OPF_2.0_final_spec.html#Section2.2.6>
+
+
+=item add_date($date, [$event])
+
+Date of publication, in the format defined by "Date and Time Formats" at
+http://www.w3.org/TR/NOTE-datetime and by ISO 8601 on which it is based. In
+particular, dates without times are represented in the form YYYY[-MM[-DD]]: a
+required 4-digit year, an optional 2-digit month, and if the month is given, an
+optional 2-digit day of month. $event is an optional description of event that
+date refers to. Possible values may include: creation, publication, and
+modification.
+
+=item add_description($description)
+
+Add description of the publication content
+
+=item add_format($format)
+
+The media type or dimensions of the resource. Best practice is to use a value from a controlled vocabulary (e.g. MIME media types).
+
+=item add_language($lang)
+
+Add language of the content of the publication. $lang must comply with RFC 3066
+(see http://www.ietf.org/rfc/rfc3066.txt)
+
+=item add_relation($relation)
+
+An identifier of an auxiliary resource and its relationship to the publication.
+
+=item add_rights($rights)
+
+A statement about rights, or a reference to one. In this specification, the copyright notice and any further rights description should appear directly.
+
+=item add_source($source)
+
+Information regarding a prior resource from which the publication was derived
+
+=item add_subject($subject)
+
+Add subject of the publication
+
+=item add_translator($name, [$formal_name])
+
+Add translator of the document. $name is in human-readable form, e.g. "Arthur
+Conan Doyle", $formal_name is in form, suitable for machine processing, e.g.
+"Doyle, Arthur Conan"
+
+=item add_type($type)
+
+type includes terms describing general categories, functions, genres, or
+aggregation levels for content. The advised best practice is to select a value
+from a controlled vocabulary.
 
 =item add_navpoint(%opts)
 

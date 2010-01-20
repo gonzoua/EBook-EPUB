@@ -42,6 +42,23 @@ has metadata    => (
     isa     => 'Object', 
     is      => 'ro',
     default => sub { EPUB::Package::Metadata->new() },
+    handles => [ qw/add_author
+                    add_contributor
+                    add_creator
+                    add_date
+                    add_dcitem
+                    add_description
+                    add_format
+                    add_item
+                    add_language
+                    add_relation
+                    add_rights
+                    add_source
+                    add_subject
+                    add_translator
+                    add_type
+                /],
+
 );
 
 has manifest    => (
@@ -66,9 +83,7 @@ has ncx     => (
     isa     => 'Object', 
     is      => 'ro',
     default => sub { EPUB::Package::NCX->new() },
-    handles => {
-        add_navpoint    => 'add_navpoint',
-    },
+    handles => [ qw/add_navpoint/ ],
 );
 
 has uid         => (
@@ -119,38 +134,24 @@ sub to_xml
     return $xml;
 }
 
-sub set_title
+sub add_title
 {
     my ($self, $title) = @_;
-    # XXX: make it set_title?
     $self->metadata->add_title($title);
+    my $ncx_title =  $self->ncx->title;
+    # Collect all titles in a row for NCX
+    $title = "$ncx_title $title" if (defined($ncx_title));
     $self->ncx->title($title);
 }
 
-sub add_language
-{
-    my ($self, $lang) = @_;
-    $self->metadata->add_language($lang);
-}
-
-sub add_translator
-{
-    my ($self, $translator) = @_;
-    $self->metadata->add_translator($translator);
-}
-
-sub add_author
-{
-    my ($self, $author) = @_;
-    $self->metadata->add_author($author);
-    $self->ncx->author($author);
-}
-
-sub set_identifier
+sub add_identifier
 {
     my ($self, $ident, $scheme) = @_;
     $self->metadata->add_identifier($ident, $scheme);
-    $self->ncx->uid($ident);
+    # Do our best guess, let it be the first UID
+    if (!defined($self->ncx->uid)) {
+        $self->ncx->uid($ident);
+    }
 }
 
 sub add_xhtml_entry
@@ -398,10 +399,10 @@ Version 0.01
     my $package = EPUB::Package->new;
 
     # Set metadata: title/author/language/id
-    $package->set_title('Three Men in a Boat');
+    $package->add_title('Three Men in a Boat');
     $package->add_author('Jerome K. Jerome');
     $package->add_language('en');
-    $package->set_identifier('0765341611');
+    $package->add_identifier('0765341611');
 
     # Add package content: stylesheet, font, xhtml
     $package->copy_stylesheet('/path/to/style.css', 'style.css');
@@ -423,27 +424,22 @@ Version 0.01
 
 Create an EPUB::Package object
 
-=item set_title($title)
+=item add_title($title)
 
 Set the title of the book
 
-=item add_language($lang)
-
-Add language to the list of document languages. At least one is 
-required. $lang should be in RFC 3066 format or its successors 
-such as the newer RFC 4646
-
-=item add_author($name)
-
-Add author to the list of document authors
-
-=item add_translator($name)
-
-Add translator to the list of document translators
-
-=item set_identifier($id)
+=item add_identifier($id)
 
 Set a unique identifier for the book, such as its ISBN or a URL
+
+For the rest of metadata-related fields see L<EPUB::Package::Metadata>
+
+=item add_navpoint(%opts)
+
+Add refrence to an OPS Content Document that is a part of publication. %opts is
+an anonymous hash, for possible key values see L<EPUB::Package::NCX::NavPoint>.
+Method returns created EPUB::Package::NCX::NavPoint object that could be used
+later for adding subsections.
 
 =item add_xhtml($data, $filename, %opts)
 

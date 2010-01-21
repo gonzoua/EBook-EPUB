@@ -30,9 +30,8 @@ use Archive::Zip;
 use File::Temp qw/tempfile/;
 use Carp;
 
-use vars qw(@ISA $VERSION);
+use vars qw(@ISA);
 @ISA     = qw(EBook::EPUB::Container);
-$VERSION = 0.1;
 
 sub new 
 {

@@ -23,7 +23,9 @@
 # SUCH DAMAGE.
 
 package EBook::EPUB;
-our $VERSION = '0.01';
+
+use version;
+our $VERSION = 0.1;
 
 use Moose;
 

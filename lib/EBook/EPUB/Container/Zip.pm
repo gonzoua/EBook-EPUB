@@ -27,7 +27,8 @@ package EBook::EPUB::Container::Zip;
 use strict;
 use EBook::EPUB::Container;
 use Archive::Zip;
-use File::Temp qw/:mktemp/;
+use File::Temp qw/tempfile/;
+use Carp;
 
 use vars qw(@ISA $VERSION);
 @ISA     = qw(EBook::EPUB::Container);
@@ -55,12 +56,18 @@ sub write
             $f->{containerpath});
     }
 
-    my $tmp_container = mktemp("containerXXXXX");
-    $self->write_container($tmp_container);
+    my (undef, $tmp_container) = tempfile;
+    if (!defined($self->write_container($tmp_container))) {
+        carp "Failed to write container to temporary file $tmp_container";
+        return;
+    }
+
     $zip->addFile($tmp_container, "META-INF/container.xml");
 
     $zip->writeToFileNamed($self->{zipfile});
     unlink($tmp_container);
+
+    return 1;
 }
 
 __END__

@@ -31,6 +31,8 @@ use XML::Writer;
 use IO::File;
 use File::Find;
 
+use Carp;
+
 sub new 
 {
     my ($class, %params) = @_;
@@ -120,6 +122,11 @@ sub write_container
 {
     my ($self, $outname) = @_;
     my $container = new IO::File(">$outname");
+
+    if (!defined($container)) {
+        return;
+    }
+
     my $writer = new XML::Writer( 
                                 OUTPUT => $container, 
                                 DATA_MODE => 1,
@@ -141,6 +148,8 @@ sub write_container
     $writer->endTag("container");
     $writer->end();
     $container->close();
+
+    return 1;
 }
 
 1;

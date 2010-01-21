@@ -37,6 +37,7 @@ use EBook::EPUB::Container::Zip;
 
 use File::Temp qw/tempdir/;
 use File::Copy;
+use Carp;
 
 has metadata    => (
     isa     => 'Object', 
@@ -281,7 +282,7 @@ sub copy_xhtml
         $self->add_xhtml_entry($filename, %opts);
     }
     else {
-        warn ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
+        carp ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
     }
 }
 
@@ -293,7 +294,7 @@ sub copy_stylesheet
         $self->add_stylesheet_entry("$filename");
     }
     else {
-        warn ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
+        carp ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
     }
 }
 
@@ -305,7 +306,7 @@ sub copy_image
         $self->add_image_entry("$filename");
     }
     else {
-        warn ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
+        carp ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
     }
 }
 
@@ -322,7 +323,7 @@ sub copy_file
         );
     }
     else {
-        warn ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
+        carp ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
     }
 }
 

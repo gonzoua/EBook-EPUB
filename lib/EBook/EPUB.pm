@@ -352,7 +352,7 @@ sub pack_zip
     my $tmpdir = $self->tmpdir;
     $self->write_ncx("$tmpdir/OPS/toc.ncx");
     $self->write_opf("$tmpdir/OPS/content.opf");
-    my $container = EPUB::Container::Zip->new($filename);
+    my $container = EBook::EPUB::Container::Zip->new($filename);
     $container->add_path($tmpdir . "/OPS", "OPS/");
     $container->add_root_file("OPS/content.opf", "application/oebps-package+xml");
     $container->write();

@@ -149,13 +149,13 @@ __END__;
 
 =head1 NAME
 
-EPUB::Container
+EBook::EPUB::Container
 
 =head1 SYNOPSIS
 
 Abstract OEPBS Container implementation
 
-    my $container = EPUB::Container->new()
+    my $container = EBook::EPUB::Container->new()
     $container->add_path('/path/to/content.ncx', 'DATA/content.ncx');
     $container->add_path('/path/to/page1.xhtml', 'DATA/page1.xhtml');
     $container->add_path('/path/to/page2.xhtml', 'DATA/page2.xhtml');
@@ -167,7 +167,7 @@ Abstract OEPBS Container implementation
 
 =item new()
 
-Create new instance of EPUB::Container object
+Create new instance of EBook::EPUB::Container object
 
 =item add_path($file_path, $container_path)
 

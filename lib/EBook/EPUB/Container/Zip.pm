@@ -24,14 +24,14 @@
 
 package EBook::EPUB::Container::Zip;
 
-use vars qw(@ISA $VERSION);
-@ISA     = qw(EPUB::Container);
-$VERSION = 0.1;
-
 use strict;
 use EBook::EPUB::Container;
 use Archive::Zip;
 use File::Temp qw/:mktemp/;
+
+use vars qw(@ISA $VERSION);
+@ISA     = qw(EBook::EPUB::Container);
+$VERSION = 0.1;
 
 sub new 
 {
@@ -67,15 +67,15 @@ __END__
 
 =head1 NAME
 
-EPUB::Container::Zip
+EBook::EPUB::Container::Zip
 
 =head1 SYNOPSIS
 
 Zip OEPBS Container implementation
 
-    my $container = EPUB::Container::Zip->new('/path/to/file.epub')
+    my $container = EBook::EPUB::Container::Zip->new('/path/to/file.epub')
 
-    # EPUB::Container methods
+    # EBook::EPUB::Container methods
     $container->add_path('/path/to/content.ncx', 'DATA/content.nx');
     $container->add_path('/path/to/page1.xhtml', 'DATA/page1.xhtml');
     $container->add_path('/path/to/page2.xhtml', 'DATA/page2.xhtml');
@@ -90,7 +90,7 @@ Zip OEPBS Container implementation
 
 =item new($zipfile)
 
-Create new instance of EPUB::Container::Zip object. $zipfile is a file where container should be saved 
+Create new instance of EBook::EPUB::Container::Zip object. $zipfile is a file where container should be saved 
 
 =item write()
 

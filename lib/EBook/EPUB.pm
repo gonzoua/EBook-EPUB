@@ -24,7 +24,6 @@
 
 package EBook::EPUB;
 
-use version;
 our $VERSION = 0.1;
 
 use Moose;
@@ -387,11 +386,11 @@ __PACKAGE__->meta->make_immutable;
 __END__
 =head1 NAME
 
-EBook::EPUB - module for building OPF documents 
+EBook::EPUB - module for generating EPUB documents
 
 =head1 VERSION
 
-Version 0.01
+Version 0.1
 
 
 =head1 SYNOPSIS
@@ -518,7 +517,7 @@ Add xhtml data $data to $filename in package.
 
 %opts is an anonymous hash array of parameters:
 
-=over 4
+=over 8
 
 =item linear 
 
@@ -540,7 +539,7 @@ Add existing xhtml file $source_file as $filename in package.
 
 %opts is an anonymous hash array of parameters:
 
-=over 4
+=over 8
 
 =item linear 
 

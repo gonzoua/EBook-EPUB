@@ -1,7 +1,7 @@
 EBook::EPUB
 
 This package contain modules to work with files in EPUB format, free and 
-open e-book standard, by the International Digital Publishing Forum (IDPF)
+open e-book standard by the International Digital Publishing Forum (IDPF)
 
 INSTALLATION
 
@@ -36,7 +36,7 @@ You can also look for information at:
 
 LICENSE AND COPYRIGHT
 
-Copyright (C) 2010 Oleksandr Tymoshenko
+Copyright (C) 2009, 2010 Oleksandr Tymoshenko
 
 This module is free software; you can redistribute it and/or modify it 
 under the terms of the BSD license. See the LICENSE file included with 

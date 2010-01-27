@@ -25,7 +25,7 @@
 package EBook::EPUB;
 
 use version;
-our $VERSION = 0.1;
+our $VERSION = 0.2;
 
 use Moose;
 

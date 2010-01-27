@@ -17,9 +17,14 @@ WriteMakefile(
         'File::Copy'    => 0,
         'File::Find'    => 0,
         'File::Temp'    => 0,
-        'Moose'         => 0,
+        'Moose'         => '0.90',
         'Test::More'    => 0,
         'XML::Writer'   => 0,
+    },
+    META_ADD => {
+        resources => {
+            repository => 'http://github.com/gonzoua/EBook-EPUB',
+        },
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'EBook-EPUB-*' },

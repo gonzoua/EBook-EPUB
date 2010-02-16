@@ -24,7 +24,8 @@
 
 package EBook::EPUB;
 
-our $VERSION = 0.1;
+use version;
+our $VERSION = 0.2;
 
 use Moose;
 
@@ -319,7 +320,7 @@ sub copy_file
         my $id = $self->nextid('id');
         $self->manifest->add_item(
             id          => $id,
-            href        => "OPS/$filename",
+            href        => "$filename",
             media_type  => $type,
         );
     }

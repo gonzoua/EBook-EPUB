@@ -1,5 +1,9 @@
 Revision history for EBook::EPUB
 
+0.2     Wed 27 Jan 2010
+        - Fix requirements
+        - Add repository to module metadata
+
 0.1     Thu 21 Jan 2010
         - First version, released on an unsuspecting world.
 

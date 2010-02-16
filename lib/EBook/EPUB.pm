@@ -512,7 +512,7 @@ an anonymous hash, for possible key values see L<EBook::EPUB::NCX::NavPoint>.
 Method returns created EBook::EPUB::NCX::NavPoint object that could be used
 later for adding subsections.
 
-=item add_xhtml($data, $filename, %opts)
+=item add_xhtml($filename, $data, %opts)
 
 Add xhtml data $data to $filename in package. 
 
@@ -526,11 +526,11 @@ Add xhtml data $data to $filename in package.
 
 =back 
 
-=item add_stylesheet($data, $filename)
+=item add_stylesheet($filename, $data)
 
 Add stylesheet data $data as $filename in package
 
-=item add_image($data, $filename, $type)
+=item add_image($filename, $data, $type)
 
 Add image data $data as $filename in package with content type $type (e.g. image/jpeg)
 

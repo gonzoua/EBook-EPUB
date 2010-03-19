@@ -39,11 +39,14 @@ has navpoints => (
 sub encode
 {
     my ($self, $writer) = @_;
-    $writer->startTag('navPoint',
-        class       => $self->class,
+    my @args = ( 
         id          => $self->id,
-        playOrder   => $self->play_order,
-    );
+        playOrder   => $self->play_order);
+    if (defined($self->class)) {
+        push @args, 'class', $self->class;
+    }
+
+    $writer->startTag('navPoint', @args);
     $writer->startTag('navLabel');
     $writer->dataElement('text', $self->label);
     $writer->endTag('navLabel');

@@ -89,9 +89,21 @@ has ncx     => (
     handles => [ qw/add_navpoint/ ],
 );
 
-has uid         => (
+has _encryption_key  => (
     isa     => 'Str',
     is      => 'rw',
+);
+
+# Array of filenames that should be encrypted
+has _encrypted_filerefs => (
+    traits     => ['Array'],
+    is         => 'ro',
+    isa        => 'ArrayRef[Str]',
+    default    => sub { [] },
+    handles    => {
+           add_encrypted_fileref => 'push',
+           encrypted_filerefs    => 'elements',
+       },
 );
 
 has id_counters => ( isa => 'HashRef', is => 'ro', default =>  sub { {} });
@@ -150,6 +162,21 @@ sub add_title
 sub add_identifier
 {
     my ($self, $ident, $scheme) = @_;
+    if ($ident =~ /^urn:uuid:(.*)/i) {
+        my $key = $1;
+        # Just some naive check for key to be UUID
+        if ($key !~ /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i) {
+            carp "$key - is not valid UUID, skipping";
+            return;
+        }
+
+        $key =~ s/-//g;
+        $key =~ s/([a-f0-9]{2})/chr(hex($1))/egi;
+
+        if (!defined($self->_encryption_key)) {
+            $self->_encryption_key($key);
+        }
+    }
     $self->metadata->add_identifier($ident, $scheme);
     # Do our best guess, let it be the first UID
     if (!defined($self->ncx->uid)) {
@@ -329,6 +356,30 @@ sub copy_file
     }
 }
 
+sub encrypt_file
+{
+    my ($self, $src_filename, $filename, $type) = @_;
+    my $tmpdir = $self->tmpdir;
+    if (!defined($self->_encryption_key)) {
+        croak "Can't encrypt without a key: no urn:uuid: indetifier has been provided";
+    }
+
+    my $key = $self->_encryption_key;
+    if (adobe_encrypt($src_filename, "$tmpdir/OPS/$filename", $key)) {
+        my $id = $self->nextid('id');
+        $self->manifest->add_item(
+            id          => $id,
+            href        => "$filename",
+            media_type  => $type,
+        );
+        $self->add_encrypted_fileref("OPS/$filename");
+    }
+    else {
+        carp ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
+    }
+}
+
+
 sub nextid
 {
     my ($self, $prefix) = @_;
@@ -358,6 +409,9 @@ sub pack_zip
     my $container = EBook::EPUB::Container::Zip->new($filename);
     $container->add_path($tmpdir . "/OPS", "OPS/");
     $container->add_root_file("OPS/content.opf", "application/oebps-package+xml");
+    foreach my $fref ($self->encrypted_filerefs) {
+        $container->add_encrypted_path($fref);
+    }
     $container->write();
 }
 
@@ -377,6 +431,46 @@ sub write_ncx
     my $xml = $self->ncx->to_xml();
     print F $xml;
     close F;
+}
+
+
+# helper function that performs Adobe content protection "encryption"
+sub adobe_encrypt
+{
+    my ($src, $dst, $key) = @_;
+    my @key_bytes = unpack "C*", $key;
+
+    # open source/destination files for read/write
+    open (IN, "< $src") or return;
+    if (!open (OUT, "> $dst")) {
+        close IN;
+        return;
+    }
+
+    binmode IN;
+    binmode OUT;
+
+    # XOR first 1024 bytes of file by provided key
+    my $data;
+    read(IN, $data, 1024);
+    my @bytes = unpack ("C*", $data);
+    my $key_ptr = 0;
+    foreach my $d (@bytes) {
+        $d = $d ^ $key_bytes[$key_ptr];
+        $key_ptr += 1;
+        $key_ptr = $key_ptr % @key_bytes;
+    }
+
+    my $crypted_data = pack "C*", @bytes;
+    print OUT $crypted_data;
+
+    # Copy th erest of the file, 1M buffer seems to be reasonable default
+    while (read(IN, $data, 1024*1024)) {
+        print OUT $data;
+    }
+
+    close IN;
+    close OUT;
 }
 
 no Moose;
@@ -431,7 +525,7 @@ Create an EBook::EPUB object
 
 Set the title of the book
 
-=item add_identifier($id)
+=item add_identifier($id, [$scheme])
 
 Set a unique identifier for the book, such as its ISBN or a URL
 
@@ -559,6 +653,11 @@ Add existing image file $source_file as $filename in package and set its content
 =item copy_file($source_file, $filename, $type)
 
 Add existing file $source_file as $filename in package and set its content type to $type (e.g. text/plain)
+
+=item encrypt_file($source_file, $filename, $type)
+
+Add existing file $source_file as $filename in package and set its content type to $type (e.g. text/plain) Apply Adobe copy protection scheme to this file using book UUID as a key. Function croaks if key has not been set previously using 
+
 
 =item pack_zip($filename)
 

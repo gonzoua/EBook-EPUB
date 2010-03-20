@@ -38,7 +38,8 @@ sub new
     my ($class, %params) = @_;
     my $self = {
             root_files => [],
-            files => []
+            files => [],
+            encrypted_files => [],
         };
     return bless $self, $class;
 }
@@ -105,6 +106,22 @@ sub add_path
 }
 
 #
+# Add encrypted file, at the moment it means font "encrypted" with 
+# Adobe content protection algorithm
+#
+sub add_encrypted_path
+{
+    my ($self, $path) = @_;
+
+    if (!is_valid_path($path)) {
+        croak("Bad container path: $path");
+        return;
+    }
+
+    push @{$self->{encrypted_files}}, $path;
+}
+
+#
 # Check if file name conforms specs
 # TODO: make conformant to spec
 sub is_valid_path
@@ -152,6 +169,60 @@ sub write_container
     return 1;
 }
 
+sub has_encrypted_files
+{
+    my ($self) = @_;
+    return 1 if (@{$self->{encrypted_files}});
+
+    # No encrypted data
+    return;
+}
+
+# 
+# Generate encryption.xml  for META-INF directory
+#
+sub write_encryption
+{
+    my ($self, $outname) = @_;
+    my $container = new IO::File(">$outname");
+
+    if (!defined($container)) {
+        return;
+    }
+
+    my $writer = new XML::Writer( 
+                                OUTPUT => $container, 
+                                DATA_MODE => 1,
+                                DATA_INDENT => 2,
+                                    );
+    $writer->xmlDecl("utf-8");
+    $writer->startTag( "encryption",
+                    "xmlns" => "urn:oasis:names:tc:opendocument:xmlns:container",
+                        );
+    foreach my $rf (@{$self->{encrypted_files}}) {
+        $writer->startTag('EncryptedData',
+            'xmlns' => 'http://www.w3.org/2001/04/xmlenc#',
+        );
+        $writer->emptyTag('EncryptionMethod', 
+            'Algorithm' => 'http://ns.adobe.com/pdf/enc#RC',
+        );
+        $writer->startTag('CipherData');
+        $writer->emptyTag('CipherReference', 
+            'URI' => $rf,
+        );
+        $writer->endTag('CipherData');
+        $writer->endTag('EncryptedData');
+    }
+
+    $writer->endTag("encryption");
+    $writer->end();
+    $container->close();
+
+    return 1;
+}
+
+
+
 1;
 
 __END__;
@@ -182,6 +253,10 @@ Create new instance of EBook::EPUB::Container object
 
 Add existing file into container
 
+=item add_encrypted_path($container_path)
+
+Mark file $container_path as encrypted. File should be already encrypted and 
+added. This function just marks it encrypted
 
 =item add_root_path($container_path)
 

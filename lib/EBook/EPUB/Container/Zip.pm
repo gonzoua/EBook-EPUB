@@ -63,6 +63,16 @@ sub write
 
     $zip->addFile($tmp_container, "META-INF/container.xml");
 
+    if ($self->has_encrypted_files) {
+        my (undef, $tmp_encryption) = tempfile;
+        if (!defined($self->write_encryption($tmp_encryption))) {
+            carp "Failed to write ncryption to temporary file $tmp_encryption";
+            return;
+        }
+
+        $zip->addFile($tmp_encryption, "META-INF/encryption.xml");
+    }
+
     $zip->writeToFileNamed($self->{zipfile});
     unlink($tmp_container);
 

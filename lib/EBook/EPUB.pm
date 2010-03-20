@@ -491,6 +491,7 @@ Version 0.1
 =head1 SYNOPSIS
 
     use EBook::EPUB;
+    use Data::UUID;
 
     # Create EPUB object
     my $epub = EBook::EPUB->new;
@@ -499,11 +500,16 @@ Version 0.1
     $epub->add_title('Three Men in a Boat');
     $epub->add_author('Jerome K. Jerome');
     $epub->add_language('en');
-    $epub->add_identifier('0765341611');
+    # Generate UUID. It's required for embedding fonts
+    my $ug = new Data::UUID;
+    my $uuid = $ug->create_from_name_str(NameSpace_URL, "fb2epub.com");
+    $epub->add_identifier("urn:uuid:$uuid");
 
     # Add package content: stylesheet, font, xhtml
     $epub->copy_stylesheet('/path/to/style.css', 'style.css');
-    $epub->copy_file('/path/to/CharisSILB.ttf', 
+    $epub->copy_file('/path/to/figure1.png', 
+        'figure1.png', 'image/png');
+    $epub->encrypt_file('/path/to/CharisSILB.ttf', 
         'CharisSILB.ttf', 'application/x-font-ttf');
     $epub->copy_xhtml('/path/to/page1.xhtml', 'page1.xhtml');
     $epub->copy_xhtml('/path/to/notes.xhtml', 'notes.xhtml',

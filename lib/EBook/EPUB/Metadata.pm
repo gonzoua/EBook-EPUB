@@ -105,7 +105,7 @@ sub add_subject
 sub add_description
 {
     my ($self, $description) = @_;
-    $self->add_dcitem('desciption', $description);
+    $self->add_dcitem('description', $description);
 }
 
 sub add_date

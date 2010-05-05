@@ -1,5 +1,11 @@
 Revision history for EBook::EPUB
 
+0.3     Wed 5 May 2010
+        - Added fonts encryption
+        - Fixed documentation (arguments order for several functions)
+        - Fixed typo in dc:description tag
+        - Fixed bug with playOrder attribute
+
 0.2     Wed 27 Jan 2010
         - Fix requirements
         - Add repository to module metadata

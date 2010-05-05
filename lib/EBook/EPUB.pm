@@ -485,7 +485,7 @@ EBook::EPUB - module for generating EPUB documents
 
 =head1 VERSION
 
-Version 0.1
+Version 0.3
 
 
 =head1 SYNOPSIS

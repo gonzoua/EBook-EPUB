@@ -251,7 +251,7 @@ Add description of the publication content
 =item add_identifier($ident, [$scheme])
 
 Add unique identifier of the publication. $scheme is an optional paramater to
-specify identification system of this particular identifier. e.g. ISDN, DOI
+specify identification system of this particular identifier. e.g. ISBN, DOI
 
 =item add_item($name, $value)
 

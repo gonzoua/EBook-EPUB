@@ -31,7 +31,7 @@ sub encode
     my ($self, $writer) = @_;
     $writer->emptyTag("meta",
         name    => $self->name(),
-        value   => $self->value(),
+        content => $self->value(),
     );
 }
 

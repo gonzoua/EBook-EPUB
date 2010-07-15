@@ -47,8 +47,7 @@ has metadata    => (
     isa     => 'Object', 
     is      => 'ro',
     default => sub { EBook::EPUB::Metadata->new() },
-    handles => [ qw/add_author
-                    add_contributor
+    handles => [ qw/add_contributor
                     add_creator
                     add_date
                     add_dcitem
@@ -149,6 +148,13 @@ sub to_xml
     $writer->end();
 
     return $xml;
+}
+
+sub add_author
+{
+    my ($self, $author, $formal) = @_;
+    $self->metadata->add_author($author, $formal);
+    $self->ncx->add_author($author);
 }
 
 sub add_title

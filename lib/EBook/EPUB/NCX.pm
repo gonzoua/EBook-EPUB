@@ -27,7 +27,7 @@ use EBook::EPUB::NCX::NavPoint;
 
 # Very simplified module for generation NCX
 
-has [qw/uid title author/] => ( isa => 'Str', is => 'rw' );
+has [qw/uid title/] => ( isa => 'Str', is => 'rw' );
 
 has navpoints => (
     traits     => ['Array'],
@@ -37,6 +37,17 @@ has navpoints => (
     handles    => {
            all_navpoints => 'elements',
        },
+);
+
+has authors => (
+    traits     => ['Array'],
+    is         => 'ro',
+    isa        => 'ArrayRef[Str]',
+    default    => sub { [] },
+    handles    => {
+          all_authors    => 'elements',
+          add_author     => 'push',
+    },
 );
 
 sub to_xml
@@ -104,9 +115,11 @@ sub create_doc_data
     $writer->dataElement('text', $self->title);
     $writer->endTag('docTitle');
 
-    $writer->startTag('docAuthor');
-    $writer->dataElement('text', $self->author);
-    $writer->endTag('docAuthor');
+    foreach my $author ($self->all_authors) {
+        $writer->startTag('docAuthor');
+        $writer->dataElement('text', $author);
+        $writer->endTag('docAuthor');
+    }
 }
 
 sub create_navmap

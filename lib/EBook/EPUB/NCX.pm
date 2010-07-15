@@ -180,9 +180,9 @@ later for adding subsections.
 
 Returns array of EBook::EPUB::NCX::NavPoint objects, current content of NCX
 
-=item author([$author)
+=item add_author([$author)
 
-Get/set book auther
+Add $author to authors list
 
 =item new(%opts)
 

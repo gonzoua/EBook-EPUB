@@ -1,6 +1,12 @@
 Revision history for EBook::EPUB
 
-0.3     Wed 5 May 2010
+0.4     Mon 19 Jul 2010
+        - EPUB now can have multiple IDs
+        - Fixed invalid <meta> tags in metadata
+        - Authors list is now in sync in OPF and NCX files
+        - It's possible to have zero or more authors in NCX
+
+0.3     Wed  5 May 2010
         - Added fonts encryption
         - Fixed documentation (arguments order for several functions)
         - Fixed typo in dc:description tag

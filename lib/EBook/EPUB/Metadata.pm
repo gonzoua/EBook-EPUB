@@ -55,7 +55,7 @@ sub encode
 sub add_title
 {
     my ($self, $title) = @_;
-    $self->add_dcitem('title', $title);
+    $self->add_meta_dcitem('title', $title);
 }
 
 sub add_contributor
@@ -71,7 +71,7 @@ sub add_contributor
         push @args, 'opf:role', $role;
     }
 
-    $self->add_dcitem('contributor', $name, @args);
+    $self->add_meta_dcitem('contributor', $name, @args);
 }
 
 sub add_creator
@@ -87,7 +87,7 @@ sub add_creator
         push @args, 'opf:role', $role;
     }
 
-    $self->add_dcitem('creator', $name, @args);
+    $self->add_meta_dcitem('creator', $name, @args);
 }
 
 sub add_author
@@ -105,13 +105,13 @@ sub add_translator
 sub add_subject
 {
     my ($self, $subject) = @_;
-    $self->add_dcitem('subject', $subject);
+    $self->add_meta_dcitem('subject', $subject);
 }
 
 sub add_description
 {
     my ($self, $description) = @_;
-    $self->add_dcitem('description', $description);
+    $self->add_meta_dcitem('description', $description);
 }
 
 sub add_date
@@ -123,19 +123,19 @@ sub add_date
     if (defined($event)) {
         push @attr, "opf:event", $event;
     }
-    $self->add_dcitem('date', $date, @attr);
+    $self->add_meta_dcitem('date', $date, @attr);
 }
 
 sub add_type
 {
     my ($self, $type) = @_;
-    $self->add_dcitem('type', $type);
+    $self->add_meta_dcitem('type', $type);
 }
 
 sub add_format
 {
     my ($self, $format) = @_;
-    $self->add_dcitem('format', $format);
+    $self->add_meta_dcitem('format', $format);
 }
 
 sub add_identifier
@@ -152,35 +152,35 @@ sub add_identifier
     if (defined($scheme)) {
         push @attr, "opf:scheme", $scheme;
     }
-    $self->add_dcitem('identifier', $ident, @attr);
+    $self->add_meta_dcitem('identifier', $ident, @attr);
 }
 
 sub add_source
 {
     my ($self, $source) = @_;
-    $self->add_dcitem('source', $source);
+    $self->add_meta_dcitem('source', $source);
 }
 
 sub add_language
 {
     # TODO: filter language?
     my ($self, $lang) = @_;
-    $self->add_dcitem('language', $lang);
+    $self->add_meta_dcitem('language', $lang);
 }
 
 sub add_relation
 {
     my ($self, $relation) = @_;
-    $self->add_dcitem('relation', $relation);
+    $self->add_meta_dcitem('relation', $relation);
 }
 
 sub add_rights
 {
     my ($self, $rights) = @_;
-    $self->add_dcitem('rights', $rights);
+    $self->add_meta_dcitem('rights', $rights);
 }
 
-sub add_dcitem
+sub add_meta_dcitem
 {
     my ($self, $name, $value, @attributes) = @_;
     my $dcitem = EBook::EPUB::Metadata::DCItem->new(
@@ -190,7 +190,7 @@ sub add_dcitem
     push @{$self->items()}, $dcitem;
 }
 
-sub add_item
+sub add_meta_item
 {
     my ($self, $name, $value) = @_;
     my $item = EBook::EPUB::Metadata::Item->new(
@@ -266,7 +266,7 @@ Add description of the publication content
 Add unique identifier of the publication. $scheme is an optional paramater to
 specify identification system of this particular identifier. e.g. ISBN, DOI
 
-=item add_item($name, $value)
+=item add_meta_item($name, $value)
 
 Add metadata item that does not belong to Dublin Core specification. Metadata
 is set by simple name/value pair.

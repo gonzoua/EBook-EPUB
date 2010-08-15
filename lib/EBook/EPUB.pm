@@ -50,10 +50,10 @@ has metadata    => (
     handles => [ qw/add_contributor
                     add_creator
                     add_date
-                    add_dcitem
+                    add_meta_dcitem
                     add_description
                     add_format
-                    add_item
+                    add_meta_item
                     add_language
                     add_relation
                     add_rights

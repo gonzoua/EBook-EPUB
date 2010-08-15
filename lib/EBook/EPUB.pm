@@ -212,6 +212,8 @@ sub add_xhtml_entry
         idref       => $id,
         linear      => $linear,
     );
+
+    return $id;
 }
 
 sub add_stylesheet_entry
@@ -223,6 +225,8 @@ sub add_stylesheet_entry
         href        => $filename,
         media_type  => 'text/css',
     );
+
+    return $id;
 }
 
 sub add_image_entry
@@ -267,6 +271,8 @@ sub add_entry
         href        => $filename,
         media_type  => $type,
     );
+
+    return $id;
 }
 
 sub add_xhtml
@@ -276,7 +282,8 @@ sub add_xhtml
     open F, ">:utf8", "$tmpdir/OPS/$filename";
     print F $data;
     close F;
-    $self->add_xhtml_entry($filename, %opts);
+
+    return $self->add_xhtml_entry($filename, %opts);
 }
 
 sub add_stylesheet
@@ -286,7 +293,8 @@ sub add_stylesheet
     open F, ">:utf8", "$tmpdir/OPS/$filename";
     print F $data;
     close F;
-    $self->add_stylesheet_entry($filename);
+
+    return $self->add_stylesheet_entry($filename);
 }
 
 sub add_image
@@ -297,7 +305,8 @@ sub add_image
     binmode F;
     print F $data;
     close F;
-    $self->add_image_entry($filename, $type);
+
+    return $self->add_image_entry($filename, $type);
 }
 
 sub add_data
@@ -308,7 +317,8 @@ sub add_data
     binmode F;
     print F $data;
     close F;
-    $self->add_entry($filename, $type);
+
+    return $self->add_entry($filename, $type);
 }
 
 sub copy_xhtml
@@ -316,11 +326,13 @@ sub copy_xhtml
     my ($self, $src_filename, $filename, %opts) = @_;
     my $tmpdir = $self->tmpdir;
     if (mkdir_and_copy($src_filename, "$tmpdir/OPS/$filename")) {
-        $self->add_xhtml_entry($filename, %opts);
+        return $self->add_xhtml_entry($filename, %opts);
     }
     else {
         carp ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
     }
+
+    return;
 }
 
 sub copy_stylesheet
@@ -328,11 +340,13 @@ sub copy_stylesheet
     my ($self, $src_filename, $filename) = @_;
     my $tmpdir = $self->tmpdir;
     if (mkdir_and_copy($src_filename, "$tmpdir/OPS/$filename")) {
-        $self->add_stylesheet_entry("$filename");
+        return $self->add_stylesheet_entry("$filename");
     }
     else {
         carp ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
     }
+
+    return;
 }
 
 sub copy_image
@@ -340,11 +354,13 @@ sub copy_image
     my ($self, $src_filename, $filename, $type) = @_;
     my $tmpdir = $self->tmpdir;
     if (mkdir_and_copy($src_filename, "$tmpdir/OPS/$filename")) {
-        $self->add_image_entry("$filename");
+        return $self->add_image_entry("$filename");
     }
     else {
         carp ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
     }
+
+    return;
 }
 
 sub copy_file
@@ -358,10 +374,13 @@ sub copy_file
             href        => "$filename",
             media_type  => $type,
         );
+        return $id;
     }
     else {
         carp ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
     }
+
+    return;
 }
 
 sub encrypt_file
@@ -381,10 +400,13 @@ sub encrypt_file
             media_type  => $type,
         );
         $self->add_encrypted_fileref("OPS/$filename");
+        return $id;
     }
     else {
         carp ("Failed to copy $src_filename to $tmpdir/OPS/$filename");
     }
+
+    return;
 }
 
 
@@ -628,7 +650,7 @@ later for adding subsections.
 
 =item add_xhtml($filename, $data, %opts)
 
-Add xhtml data $data to $filename in package. 
+Add xhtml data $data to $filename in package. Returns id of newly added entry.
 
 %opts is an anonymous hash array of parameters:
 
@@ -642,15 +664,15 @@ Add xhtml data $data to $filename in package.
 
 =item add_stylesheet($filename, $data)
 
-Add stylesheet data $data as $filename in package
+Add stylesheet data $data as $filename in package. Returns id of newly added entry.
 
 =item add_image($filename, $data, $type)
 
-Add image data $data as $filename in package with content type $type (e.g. image/jpeg)
+Add image data $data as $filename in package with content type $type (e.g. image/jpeg). Returns id of newly added entry.
 
 =item copy_xhtml($source_file, $filename, %opts)
 
-Add existing xhtml file $source_file as $filename in package. 
+Add existing xhtml file $source_file as $filename in package. Returns id of newly added entry.
 
 %opts is an anonymous hash array of parameters:
 
@@ -664,20 +686,19 @@ Add existing xhtml file $source_file as $filename in package.
 
 =item copy_stylesheet($source_file, $filename)
 
-Add existing css file $source_file as $filename in package
+Add existing css file $source_file as $filename in package. Returns id of newly added entry.
 
 =item copy_image($source_file, $filename, $type)
 
-Add existing image file $source_file as $filename in package and set its content type to $type (e.g. image/jpeg)
+Add existing image file $source_file as $filename in package and set its content type to $type (e.g. image/jpeg). Returns id of newly added entry.
 
 =item copy_file($source_file, $filename, $type)
 
-Add existing file $source_file as $filename in package and set its content type to $type (e.g. text/plain)
+Add existing file $source_file as $filename in package and set its content type to $type (e.g. text/plain). Returns id of newly created entry. Returns id of newly added entry.
 
 =item encrypt_file($source_file, $filename, $type)
 
-Add existing file $source_file as $filename in package and set its content type to $type (e.g. text/plain) Apply Adobe copy protection scheme to this file using book UUID as a key. Function croaks if key has not been set previously using 
-
+Add existing file $source_file as $filename in package and set its content type to $type (e.g. text/plain) Apply Adobe copy protection scheme to this file using book UUID as a key. Function croaks if key has not been set previously using. Returns id of newly added entry.
 
 =item pack_zip($filename)
 

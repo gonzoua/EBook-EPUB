@@ -37,6 +37,7 @@ use EBook::EPUB::NCX;
 
 use EBook::EPUB::Container::Zip;
 
+use Data::UUID;
 use File::Temp qw/tempdir/;
 use File::Basename qw/dirname/;
 use File::Copy;
@@ -90,6 +91,11 @@ has ncx     => (
     handles => [ qw/add_navpoint/ ],
 );
 
+has _uuid  => (
+    isa     => 'Str',
+    is      => 'rw',
+);
+
 has _encryption_key  => (
     isa     => 'Str',
     is      => 'rw',
@@ -121,6 +127,11 @@ sub BUILD
 
     $self->spine->toc('ncx');
     mkdir ($self->tmpdir . "/OPS") or die "Can't make OPS dir in " . $self->tmpdir;
+    # Implicitly generate UUID for book
+    my $ug = new Data::UUID;
+    my $uuid = $ug->create_from_name_str(NameSpace_URL, "EBook::EPUB");
+    $self->_set_uuid($uuid);
+
 }
 
 sub to_xml
@@ -167,28 +178,39 @@ sub add_title
     $self->ncx->title($title);
 }
 
+sub _set_uuid
+{
+    my ($self, $uuid) = @_; 
+
+    # Just some naive check for key to be UUID
+    if ($uuid !~ /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i) {
+        carp "$uuid - is not valid UUID";
+        return;
+    }
+    my $key = $uuid;
+
+    $key =~ s/-//g;
+    $key =~ s/([a-f0-9]{2})/chr(hex($1))/egi;
+    $self->_encryption_key($key);
+    if (defined($self->_uuid)) {
+        warn "Overriding existing uuid " . $self->_uuid;
+        $self->_uuid($uuid);
+    }
+
+    $self->ncx->uid("urn:uuid:$uuid");
+    $self->metadata->set_book_id("urn:uuid:$uuid");
+    $self->_uuid($uuid);
+}
+
 sub add_identifier
 {
     my ($self, $ident, $scheme) = @_;
     if ($ident =~ /^urn:uuid:(.*)/i) {
-        my $key = $1;
-        # Just some naive check for key to be UUID
-        if ($key !~ /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i) {
-            carp "$key - is not valid UUID, skipping";
-            return;
-        }
-
-        $key =~ s/-//g;
-        $key =~ s/([a-f0-9]{2})/chr(hex($1))/egi;
-
-        if (!defined($self->_encryption_key)) {
-            $self->_encryption_key($key);
-        }
+        my $uuid = $1;
+        $self->_set_uuid($uuid);
     }
-    $self->metadata->add_identifier($ident, $scheme);
-    # Do our best guess, let it be the first UID
-    if (!defined($self->ncx->uid)) {
-        $self->ncx->uid($ident);
+    else {
+        $self->metadata->add_identifier($ident, $scheme);
     }
 }
 

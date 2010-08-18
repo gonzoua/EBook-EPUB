@@ -549,7 +549,6 @@ Version 0.5
 =head1 SYNOPSIS
 
     use EBook::EPUB;
-    use Data::UUID;
 
     # Create EPUB object
     my $epub = EBook::EPUB->new;
@@ -558,7 +557,7 @@ Version 0.5
     $epub->add_title('Three Men in a Boat');
     $epub->add_author('Jerome K. Jerome');
     $epub->add_language('en');
-    $epub->add_identifier("1440465908", 'ISBN');
+    $epub->add_identifier('1440465908', 'ISBN');
 
     # Add package content: stylesheet, font, xhtml and cover
     $epub->copy_stylesheet('/path/to/style.css', 'style.css');

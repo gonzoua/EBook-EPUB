@@ -14,6 +14,7 @@ WriteMakefile(
     PREREQ_PM => {
         'Archive::Zip'  => 0,
         'Carp'          => 0,
+        'Data::UUID'    => 0,
         'File::Copy'    => 0,
         'File::Find'    => 0,
         'File::Temp'    => 0,

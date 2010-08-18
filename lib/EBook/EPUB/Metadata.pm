@@ -22,6 +22,7 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 package EBook::EPUB::Metadata;
+use Carp;
 use Moose;
 use EBook::EPUB::Metadata::DCItem;
 use EBook::EPUB::Metadata::Item;
@@ -38,6 +39,11 @@ has id_counter => (
     default     => 0,
 );
 
+has _book_id_item => (
+    is          => 'rw',
+    isa         => 'Ref',
+);
+
 sub encode
 {
     my ($self, $writer) = @_;
@@ -49,6 +55,9 @@ sub encode
     foreach my $item (@{$self->items()}) {
         $item->encode($writer);
     }
+    my $id_item = $self->_book_id_item;
+    croak('No BookId specified by set_book_id') if (!defined($id_item));
+    $id_item->encode($writer);
     $writer->endTag("metadata");
 }
 
@@ -136,6 +145,19 @@ sub add_format
 {
     my ($self, $format) = @_;
     $self->add_meta_dcitem('format', $format);
+}
+
+sub set_book_id
+{
+    my ($self, $book_id) = @_;
+    my @attr = ('id', 'BookId');
+    my $dcitem = EBook::EPUB::Metadata::DCItem->new(
+            name        => "dc:identifier",
+            value       => $book_id,
+            attributes  => \@attr);
+
+    $self->_book_id_item($dcitem);
+
 }
 
 sub add_identifier

@@ -558,10 +558,7 @@ Version 0.5
     $epub->add_title('Three Men in a Boat');
     $epub->add_author('Jerome K. Jerome');
     $epub->add_language('en');
-    # Generate UUID. It's required for embedding fonts
-    my $ug = new Data::UUID;
-    my $uuid = $ug->create_from_name_str(NameSpace_URL, "fb2epub.com");
-    $epub->add_identifier("urn:uuid:$uuid");
+    $epub->add_identifier("1440465908", 'ISBN');
 
     # Add package content: stylesheet, font, xhtml and cover
     $epub->copy_stylesheet('/path/to/style.css', 'style.css');
@@ -683,6 +680,10 @@ Add refrence to an OPS Content Document that is a part of publication. %opts is
 an anonymous hash, for possible key values see L<EBook::EPUB::NCX::NavPoint>.
 Method returns created EBook::EPUB::NCX::NavPoint object that could be used
 later for adding subsections.
+
+=item add_meta_item($name, $value)
+
+Add non-standard item to metadata e.g. metadata from source documetn that is not described in Doublin Core spec.
 
 =item add_xhtml($filename, $data, %opts)
 

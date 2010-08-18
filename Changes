@@ -1,5 +1,14 @@
 Revision history for EBook::EPUB
 
+0.5     Tue 17 Aug 2010
+        - add_item and add_dcitem renamed to add_meta_item and
+            add_meta_dcitem respectively
+        - Return ids of items added/created by add_xhtml, add_image,
+            copy_xhtml, etc. 
+        - Implicitly create UUID for new EPUB document. Treat urn:uuid
+            identifiers separately from other schemes. Module depends
+            on Data::UUID now.
+
 0.4     Mon 19 Jul 2010
         - EPUB now can have multiple IDs
         - Fixed invalid <meta> tags in metadata

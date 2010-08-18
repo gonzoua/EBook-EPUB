@@ -36,10 +36,6 @@ has attributes => (
     isa     => 'ArrayRef[Str]',
     is      => 'ro',
     default => sub { [] },
-    handles    => {
-          all_options    => 'elements',
-          add_option     => 'push',
-    },
 );
 
 sub encode

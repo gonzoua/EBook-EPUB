@@ -129,9 +129,8 @@ sub BUILD
     mkdir ($self->tmpdir . "/OPS") or die "Can't make OPS dir in " . $self->tmpdir;
     # Implicitly generate UUID for book
     my $ug = new Data::UUID;
-    my $uuid = $ug->create_from_name_str(NameSpace_URL, "EBook::EPUB");
+    my $uuid = $ug->create_str();
     $self->_set_uuid($uuid);
-
 }
 
 sub to_xml

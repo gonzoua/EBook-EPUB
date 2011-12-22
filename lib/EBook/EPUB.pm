@@ -145,7 +145,7 @@ sub to_xml
         DATA_INDENT => 2,
     );
 
-    $writer->xmlDecl();
+    $writer->xmlDecl("utf-8");
     $writer->startTag('package', 
         xmlns               => 'http://www.idpf.org/2007/opf',
         version             => '2.0',

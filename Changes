@@ -1,5 +1,12 @@
 Revision history for EBook::EPUB
 
+0.6     Thu 22 Dec 2011
+        - Generate truly unique UUID 
+        - Propagate error during actual archive generation (pack_zip)
+           to upper level so user code can handle them
+        - Add setters for two DC items: publisher and coverage
+        - Set XML encoding explicitly in OPF file XML declaration
+
 0.5     Tue 17 Aug 2010
         - add_item and add_dcitem renamed to add_meta_item and
             add_meta_dcitem respectively

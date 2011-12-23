@@ -26,7 +26,7 @@ package EBook::EPUB::Container::Zip;
 
 use strict;
 use EBook::EPUB::Container;
-use Archive::Zip;
+use Archive::Zip qw( :ERROR_CODES :CONSTANTS );;
 use File::Temp qw/tempfile/;
 use Carp;
 
@@ -76,11 +76,12 @@ sub write
         $zip->addFile($tmp_encryption, "META-INF/encryption.xml");
     }
 
-    $zip->writeToFileNamed($self->{zipfile});
+    my $result = $zip->writeToFileNamed($self->{zipfile});
     unlink($tmp_encryption);
     unlink($tmp_container);
-
-    return 1;
+    return 1 if ($result == AZ_OK);
+    # We failed
+    return;
 }
 
 __END__

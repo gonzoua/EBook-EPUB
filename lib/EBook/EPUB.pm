@@ -465,7 +465,7 @@ sub pack_zip
     foreach my $fref ($self->encrypted_filerefs) {
         $container->add_encrypted_path($fref);
     }
-    $container->write();
+    return $container->write();
 }
 
 sub write_opf

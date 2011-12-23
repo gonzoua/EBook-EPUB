@@ -50,12 +50,14 @@ has metadata    => (
     default => sub { EBook::EPUB::Metadata->new() },
     handles => [ qw/add_contributor
                     add_creator
+                    add_coverage
                     add_date
                     add_meta_dcitem
                     add_description
                     add_format
                     add_meta_item
                     add_language
+                    add_publisher
                     add_relation
                     add_rights
                     add_source
@@ -620,6 +622,9 @@ suitable for machine processing, e.g.  "Doyle, Arthur Conan". $role reflects
 kind of contribution to document. See Section 2.2.6 of OPF specification for
 list of possible values L<http://www.idpf.org/2007/opf/OPF_2.0_final_spec.html#Section2.2.6>
 
+=item add_coverage($coverage)
+
+The extent or scope of the content of the resource.
 
 =item add_date($date, [$event])
 
@@ -643,6 +648,10 @@ The media type or dimensions of the resource. Best practice is to use a value fr
 
 Add language of the content of the publication. $lang must comply with RFC 3066
 (see http://www.ietf.org/rfc/rfc3066.txt)
+
+=item add_publisher($publisher)
+
+An entity responsible for making the resource available
 
 =item add_relation($relation)
 

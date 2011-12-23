@@ -147,6 +147,18 @@ sub add_format
     $self->add_meta_dcitem('format', $format);
 }
 
+sub add_publisher
+{
+    my ($self, $publisher) = @_;
+    $self->add_meta_dcitem('publisher', $publisher);
+}
+
+sub add_coverage
+{
+    my ($self, $coverage) = @_;
+    $self->add_meta_dcitem('coverage', $coverage);
+}
+
 sub set_book_id
 {
     my ($self, $book_id) = @_;
@@ -269,6 +281,10 @@ kind of contribution to document. See Section 2.2.6 of OPF specification for
 list of possible values L<http://www.idpf.org/2007/opf/OPF_2.0_final_spec.html#Section2.2.6>
 
 
+=item add_coverage($coverage)
+
+The extent or scope of the content of the resource.
+
 =item add_date($date, [$event])
 
 Date of publication, in the format defined by "Date and Time Formats" at
@@ -301,6 +317,10 @@ The media type or dimensions of the resource. Best practice is to use a value fr
 
 Add language of the content of the publication. $lang must comply with RFC 3066
 (see http://www.ietf.org/rfc/rfc3066.txt)
+
+=item add_publisher($publisher)
+
+An entity responsible for making the resource available
 
 =item add_relation($relation)
 

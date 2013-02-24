@@ -26,6 +26,12 @@ use Moose;
 use EBook::EPUB::Spine::Itemref;
 
 has toc => ( isa => 'Str', is => 'rw' );
+
+has page_progression_direction => (
+    isa => "Str",
+    is  => "rw"
+);
+
 has itemrefs => (
     traits     => ['Array'],
     is         => 'ro',
@@ -41,6 +47,7 @@ sub encode
     my ($self, $writer) = @_;
     $writer->startTag("spine",
         toc => $self->toc,
+        $self->page_progression_direction ? ( "page-progression-direction" => $self->page_progression_direction ) : (),
     );
 
     foreach my $itemref (@{$self->itemrefs()}) {
